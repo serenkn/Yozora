@@ -1,0 +1,37 @@
+# アプリ外部ファイル・設定
+HELP.md
+.env
+
+# ビルド成果物
+target/
+build/
+*.jar
+
+# Maven
+.mvn/wrapper/*
+!.mvn/wrapper/maven-wrapper.properties
+
+# STS (Spring Tool Suite)
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# IntelliJ IDEA
+.idea
+*.iws
+*.iml
+*.ipr
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/

@@ -1,0 +1,55 @@
+/* 
+	SpringBoot講座スタイルシート
+	SpringSampleプロジェクト以降共通
+*/
+
+@charset "UTF-8";
+
+/* ----- body設定 ----- */
+body {
+    margin-top: 10px;
+    padding: 0;
+}
+
+/* ----- 画面サイズ ----- */
+#wrapper {
+    margin: 0px auto;
+    width: 1000px;
+}
+
+/* ----- main領域 ----- */
+main {
+    margin: 10px 0px;
+}
+
+/* ----- エラーメッセージ用 ----- */
+.errors {
+    color: #ff0000;
+}
+
+/* ----- フォームレイアウト ----- */
+#form-area {
+    width: 850px;
+    margin: 0px auto;
+}
+
+/* ----- form内一行レイアウト ----- */
+.form-row {
+    margin: 8px auto;
+}
+
+/* ----- formラベルタイトルレイアウト ----- */
+.disp-block {
+    display: block;
+}
+
+/* ----- ボタンレイアウト ----- */
+.btn {
+    background: #0066ff;
+    border: 0;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 1em;
+    padding: 4px 16px;
+    cursor: pointer;
+}
