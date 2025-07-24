@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>マイページ</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}">
+</head>
+
+<body>
+    <main>
+        <!-- プロフィールヘッダー -->
+        <header class="profile-header">
+            <div class="profile-container">
+                <div class="profile-image">
+                    <img th:src="@{/images/default-icon.png}" alt="プロフィール画像">
+                </div>
+
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="link-button">ログアウト</button>
+                </form>
+
+                <div class="profile-details">
+                    <p class="user-name" th:text="${user.userName}">ユーザー名</p>
+                    <div class="profile-stats">
+                        <div><strong th:text="${postList != null ? postList.size() : 0}">0</strong><span>投稿</span></div>
+                        <div><strong th:text="${followerCount}">0</strong><span>フォロワー</span></div>
+                        <div><strong th:text="${followCount}">0</strong><span>フォロー中</span></div>
+                    </div>
+                    <div class="profile-actions">
+                        <a th:href="@{/userEdit}" class="edit-btn">プロフィールを編集</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 投稿一覧 -->
+        <section class="post-list">
+            <!-- 投稿がない場合の表示 -->
+            <div class="no-posts" th:if="${postList == null or postList.isEmpty()}">
+                <p>投稿がありません</p>
+            </div>
+
+            <!-- 投稿がある場合の表示 -->
+            <div class="posts-container" th:if="${postList != null and !postList.isEmpty()}">
+                <div th:each="post : ${postList}" class="post-item">
+
+                    <!-- 画像複数枚表示 -->
+                    <div class="post-images">
+                        <img th:each="img : ${post.imageUrls}" th:src="${img}" alt="投稿画像" class="post-image">
+                    </div>
+
+                    <!-- タイトル -->
+                    <p class="post-title" th:text="${post.title}"></p>
+
+                    <!-- いいね数 -->
+                    <p class="likes" th:text="'♥ ' + ${post.likeCount}"></p>
+
+                    <!-- ルートボタン -->
+                    <form th:action="@{/route}" method="get">
+                        <input type="hidden" name="id" th:value="${post.id}">
+                        <input type="submit" value="ルート案内" class="route-btn">
+                    </form>
+
+                    <!-- 本文 -->
+                    <p class="post-text" th:text="${post.text}"></p>
+
+                    <!-- 住所 -->
+                    <p class="post-address" th:text="${post.address}"></p>
+
+                    <!-- 投稿日時 -->
+                    <p class="post-date" th:text="${#dates.format(post.createdAt, 'yyyy/MM/dd HH:mm')}"></p>
+
+                    <!-- コメント一覧 -->
+                    <div class="comments">
+                        <ul>
+                            <li th:each="comment : ${post.commentList}" th:text="${comment.text}"></li>
+                        </ul>
+                    </div>
+
+                    <!-- 編集・削除ボタン -->
+                    <div class="post-actions">
+                        <a th:href="@{/post/edit/{id}(id=${post.id})}" class="btn">編集</a>
+
+                        <form th:action="@{/post/delete}" method="post" onsubmit="return confirm('本当に削除しますか？');">
+                            <input type="hidden" name="id" th:value="${post.id}">
+                            <input type="submit" value="削除" class="delete-btn">
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- フッター -->
+    <footer>
+        <nav class="footer-nav">
+            <a th:href="@{/top}">TOP</a>
+            <a th:href="@{/scenery}">景色一覧</a>
+            <a th:href="@{/mypage}">マイページ</a>
+        </nav>
+    </footer>
+</body>
+
+</html>

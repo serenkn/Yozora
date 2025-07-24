@@ -1,37 +1,18 @@
-# アプリ外部ファイル・設定
-HELP.md
-.env
-
-# ビルド成果物
+# ビルド関連
 target/
-build/
 *.jar
+*.class
 
-# Maven
-.mvn/wrapper/*
-!.mvn/wrapper/maven-wrapper.properties
-
-# STS (Spring Tool Suite)
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-# IntelliJ IDEA
-.idea
-*.iws
-*.iml
-*.ipr
-
-# NetBeans
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-
-# VS Code
+# VSCode
 .vscode/
+
+# ログ・一時ファイル
+*.log
+*.tmp
+
+# OSゴミファイル
+Thumbs.db
+
+# 環境設定ファイル
+.env
+.docker/

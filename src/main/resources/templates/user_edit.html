@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>プロフィール編集</title>
+</head>
+
+<body>
+    <header>
+        <div class="form-header">
+            <h1>プロフィールを編集してほしいな～</h1>
+        </div>
+    </header>
+
+    <div id="wrapper">
+        <main>
+            <div id="form-area">
+                <form th:action="@{/userEdit}" th:object="${userEditForm}" method="post">
+
+                    <div class="form-center">
+                        <label for="profileImage" class="form-label">アイコン:</label>
+                        <input id="profileImage" th:field="*{profileImage}" type="file" accept="image/*">
+                    </div>
+
+                    <div class="form-center">
+                        <label for="userName" class="form-label">ユーザーネーム:</label>
+                        <input id="userName" th:field="*{userName}" placeholder="Yozora">
+                    </div>
+                    <div class="form-validate">
+                        <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="errors"></span>
+                    </div>
+
+                    <div class="form-center">
+                        <label for="email" class="form-label">メールアドレス:</label>
+                        <input id="email" size="30" th:field="*{email}" placeholder="star-4649@yozora.com">
+                    </div>
+                    <div class="form-validate">
+                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="errors"></span>
+                    </div>
+
+                    <div class="form-center">
+                        <label for="password" class="form-label">パスワード:</label>
+                        <input type="password" size="30" th:field="*{password}">
+                    </div>
+                    <div class="form-validate">
+                        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="errors"></span>
+                    </div>
+
+                    <div class="form-btn">
+                        <input type="submit" value="登録" class="btn">
+                    </div>
+                    <div class="form-center">
+                        <span th:text="${error}" class="errors"></span>
+                    </div>
+
+                </form>
+
+                <span id="error-msg" th:data-error="${error}" style="display:none;"></span>
+
+                <form th:action="@{/userDelete}" method="post" onsubmit="return confirm('本当にアカウントを削除しますか？');">
+                    <button type="submit" class="link-button">退会</button>
+                </form>
+
+                <form th:action="@{/mypage}">
+                    <div class="form-btn">
+                        <input type="submit" value="戻る" class="btn">
+                    </div>
+                </form>
+
+            </div>
+
+        </main>
+    </div>
+
+</body>
+
+</html>

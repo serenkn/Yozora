@@ -1,0 +1,11 @@
+.no-posts {
+    text-align: center;
+    padding: 30px 40px;
+    font-size: 1.2rem;
+    color: #777;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin: 40px auto;
+    width: fit-content;
+}

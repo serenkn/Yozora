@@ -1,38 +1,14 @@
-version: '3.8'
-
 services:
   db:
-    image: mysql:8.0
-    container_name: mysql-db
+    image: mysql:8.0.36
+    container_name: yozora-db
+    ports:
+      - "3307:3306"
     environment:
-      MYSQL_DATABASE: starapp
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
-    ports:
-      - "3306:3306"
+      MYSQL_DATABASE: yozora
     volumes:
-      - db_data:/var/lib/mysql
-    networks:
-      - spring-network
-
-  app:
-    build: ./backend
-    container_name: spring-app
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/starapp
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-    networks:
-      - spring-network
+      - mysql_data:/var/lib/mysql
 
 volumes:
-  db_data:
-
-
-networks:
-  spring-network:
+  mysql_data:
