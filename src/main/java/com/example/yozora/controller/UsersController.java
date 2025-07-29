@@ -29,7 +29,7 @@ public class UsersController {
 
     // 新規登録画面表示
     @GetMapping(value = "/userRegist")
-    public String toRegist(Model model) {
+    public String toUserRegist(Model model) {
 
         model.addAttribute("userRegistForm", new UserRegistForm());
 
@@ -56,7 +56,7 @@ public class UsersController {
             return "user_regist";
 
         } else {
-            redirectAttributes.addFlashAttribute("message", "登録が完了しました。ログインしてください。");
+            redirectAttributes.addFlashAttribute("message", "登録が完了しました。");
 
             usersService.authenticateUser(form.getEmail());
 
@@ -65,44 +65,40 @@ public class UsersController {
     }
 
     // プロフィール変更画面表示
-    @GetMapping("/userEdit")
+    @GetMapping(value = "/userEdit")
     public String toUserUpdate(@AuthenticationPrincipal User loginUser, Model model) {
-
         // ユーザー情報の取得
         String email = loginUser.getUsername();
-
         UsersEntity user = usersService.getUserByEmail(email);
+        // ユーザー情報をフォームに変換
+        UserEditForm form = usersService.convertToForm(user);
+        // プロフィール画像のパスをフォームにセット
+        form.setProfileImage(user.getProfileImage());
 
-        model.addAttribute("userEditForm", user);
+        model.addAttribute("userEditForm", form);
 
         return "user_edit";
     }
 
     // プロフィール変更処理
-    @PostMapping("/userEdit")
-    public String userUpdate(@Validated @ModelAttribute UserEditForm form,
+    @PostMapping(value = "/userEdit")
+    public String userUpdate(@AuthenticationPrincipal User loginUser,
+            @Validated @ModelAttribute UserEditForm form,
             BindingResult result,
             Model model) {
 
         if (result.hasErrors()) {
             return "user_edit";
         }
+        // // ユーザー情報の取得:id
+        String email = loginUser.getUsername();
+        UsersEntity user = usersService.getUserByEmail(email);
+        form.setId(user.getId());
 
         // ユーザー情報の更新
-        int numberOfRow = usersService.editUser(form);
+        usersService.editUser(form);
 
-        if (numberOfRow == 0) {
-
-            model.addAttribute("error", "変更に失敗しました");
-
-            return "user_edit";
-
-        } else {
-
-            model.addAttribute("message", "プロフィールを変更しました");
-
-            return "redirect:/mypage";
-        }
+        return "redirect:/mypage";
     }
 
     // ユーザ退会処理

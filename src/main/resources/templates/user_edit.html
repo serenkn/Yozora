@@ -4,24 +4,28 @@
 <head>
     <meta charset="UTF-8" />
     <title>プロフィール編集</title>
+    <link th:href="@{/css/login.css}" rel="stylesheet">
+    <script src="/js/script.js" defer></script>
 </head>
 
 <body>
     <header>
         <div class="form-header">
-            <h1>プロフィールを編集してほしいな～</h1>
+            <h1>プロフィールを編集して星いな～</h1>
         </div>
     </header>
 
     <div id="wrapper">
         <main>
             <div id="form-area">
-                <form th:action="@{/userEdit}" th:object="${userEditForm}" method="post">
+                <form th:action="@{/userEdit}" th:object="${userEditForm}" method="post" enctype="multipart/form-data">
 
-                    <div class="form-center">
-                        <label for="profileImage" class="form-label">アイコン:</label>
-                        <input id="profileImage" th:field="*{profileImage}" type="file" accept="image/*">
-                    </div>
+                    <label for="imageInput">
+                        <img id="profilePreview" th:src="@{${userEditForm.profileImage}}" alt="プロフィール画像"
+                            class="profile-image">
+                    </label>
+                    <input type="file" id="imageInput" th:field="*{image}" accept="image/*" style="display: none;">
+                    <input type="hidden" th:field="*{profileImage}"></input>
 
                     <div class="form-center">
                         <label for="userName" class="form-label">ユーザーネーム:</label>
@@ -39,28 +43,18 @@
                         <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="errors"></span>
                     </div>
 
-                    <div class="form-center">
-                        <label for="password" class="form-label">パスワード:</label>
-                        <input type="password" size="30" th:field="*{password}">
-                    </div>
-                    <div class="form-validate">
-                        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="errors"></span>
-                    </div>
-
                     <div class="form-btn">
-                        <input type="submit" value="登録" class="btn">
+                        <input type="submit" value="保存" class="btn">
                     </div>
                     <div class="form-center">
                         <span th:text="${error}" class="errors"></span>
                     </div>
 
+                    <input type="hidden" th:field="*{id}"></input>
+
                 </form>
 
                 <span id="error-msg" th:data-error="${error}" style="display:none;"></span>
-
-                <form th:action="@{/userDelete}" method="post" onsubmit="return confirm('本当にアカウントを削除しますか？');">
-                    <button type="submit" class="link-button">退会</button>
-                </form>
 
                 <form th:action="@{/mypage}">
                     <div class="form-btn">
@@ -68,9 +62,17 @@
                     </div>
                 </form>
 
-            </div>
 
+            </div>
         </main>
+
+        <footer>
+            <form th:action="@{/userDelete}" method="post" onsubmit="return confirm('本当にアカウントを削除しますか？');">
+                <button type="submit" class="link-button">退会</button>
+            </form>
+
+            <a th:href="@{/password_edit}">パスワード変更はこちら</a>
+        </footer>
     </div>
 
 </body>

@@ -7,8 +7,17 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+
 @Configuration
 public class SecurityConfig {
+
+        // 静的リソースをセキュリティ対象外にする設定
+        @Bean
+        public WebSecurityCustomizer webSecurityCustomizer() {
+                return (web) -> web.ignoring().requestMatchers(
+                                "/css/**", "/js/**", "/images/**");
+        }
 
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

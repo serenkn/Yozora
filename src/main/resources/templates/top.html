@@ -8,17 +8,31 @@
 </head>
 
 <body>
-    <main>
-        <!-- 検索バー -->
-        <div class="search-bar">
-            <input type="text" id="search-input" placeholder="検索" autocomplete="off">
-            <ul id="search-suggestions" class="hidden"></ul>
+    <p th:if="${message}" class="message" th:text="${message}"></p>
+
+    <!-- 地図表示領域 -->
+    <main id="map-container">
+        <!-- 検索バー＋地図切替ボタン -->
+        <div id="map-controls">
+            <div class="left-ui">
+                <div class="map-toggle">
+                    <button onclick="setMapType('roadmap')">地図</button>
+                    <button onclick="setMapType('hybrid')">航空写真</button>
+                </div>
+            </div>
+            <div class="right-ui">
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="検索" autocomplete="off">
+                    <ul id="search-suggestions" class="hidden"></ul>
+                </div>
+            </div>
         </div>
 
-        <!-- Google Map表示 -->
-        <div id="map" style="height: 500px; width: 100%;"></div>
+        <!-- GoogleMap -->
+        <div id="map"></div>
     </main>
 
+    <!-- フッター -->
     <footer>
         <nav class="footer-nav">
             <a th:href="@{/top}">TOP</a>
@@ -40,7 +54,6 @@
     <!-- APIを読み込み　-->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsqURmvn6hJLiRn1-eqrGC5aoSdXHW-Yg&callback=initMap"
         async defer></script>
-
 </body>
 
 </html>

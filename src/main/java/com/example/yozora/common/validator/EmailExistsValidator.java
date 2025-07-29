@@ -9,7 +9,7 @@ import com.example.yozora.repository.UsersRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-// 新規登録用のメールアドレス存在チェックバリデータ
+// 新規登録用：メールアドレス重複チェックバリデータ
 @Component
 public class EmailExistsValidator implements ConstraintValidator<UserEmailExists, String> {
 
@@ -18,9 +18,13 @@ public class EmailExistsValidator implements ConstraintValidator<UserEmailExists
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
+
         if (email == null || email.isEmpty()) {
             return true; // 空
         }
-        return !usersRepository.isUserEmailExists(email); // Tableに登録済みのemailがあればfalse
+        // Tableに登録済みのemailがあればfalse
+        Boolean isValidEmail = usersRepository.isUserEmailExists(email);
+
+        return isValidEmail;
     }
 }

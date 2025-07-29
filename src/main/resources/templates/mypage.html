@@ -11,21 +11,27 @@
     <main>
         <!-- プロフィールヘッダー -->
         <header class="profile-header">
-            <div class="profile-container">
-                <div class="profile-image">
-                    <img th:src="@{/images/default-icon.png}" alt="プロフィール画像">
-                </div>
-
+            <!-- ログアウトボタン -->
+            <div class="logout-wrapper">
                 <form th:action="@{/logout}" method="post">
                     <button type="submit" class="link-button">ログアウト</button>
                 </form>
+            </div>
 
-                <div class="profile-details">
+            <!-- プロフィールエリア -->
+            <div class="profile-horizontal">
+                <!-- プロフィール画像 -->
+                <div class="profile-image">
+                    <img th:src="@{${user.profileImage}}" alt="プロフィール画像">
+                </div>
+
+                <!-- プロフィール情報 -->
+                <div class="profile-info">
                     <p class="user-name" th:text="${user.userName}">ユーザー名</p>
                     <div class="profile-stats">
-                        <div><strong th:text="${postList != null ? postList.size() : 0}">0</strong><span>投稿</span></div>
-                        <div><strong th:text="${followerCount}">0</strong><span>フォロワー</span></div>
-                        <div><strong th:text="${followCount}">0</strong><span>フォロー中</span></div>
+                        <div><strong th:text="${postList != null ? postList.size() : 0}">0</strong> 投稿</div>
+                        <div><strong th:text="${followerCount}">0</strong> フォロワー</div>
+                        <div><strong th:text="${followCount}">0</strong> フォロー中</div>
                     </div>
                     <div class="profile-actions">
                         <a th:href="@{/userEdit}" class="edit-btn">プロフィールを編集</a>
@@ -33,6 +39,7 @@
                 </div>
             </div>
         </header>
+
 
         <!-- 投稿一覧 -->
         <section class="post-list">

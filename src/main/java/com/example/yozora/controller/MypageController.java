@@ -36,6 +36,7 @@ public class MypageController {
         // ユーザー情報の取得
         String email = loginUser.getUsername();
         UsersEntity user = usersService.getUserByEmail(email);
+
         model.addAttribute("user", user);
 
         // 投稿一覧の取得

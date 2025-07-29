@@ -1,55 +1,145 @@
-/* 
-	SpringBoot講座スタイルシート
-	SpringSampleプロジェクト以降共通
-*/
-
-@charset "UTF-8";
-
-/* ----- body設定 ----- */
+/* 星空背景のみ使用 */
 body {
-    margin-top: 10px;
+    margin: 0;
     padding: 0;
+    font-family: "Helvetica Neue", sans-serif;
+    background: url("/images/star_background.jpg") no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-/* ----- 画面サイズ ----- */
-#wrapper {
-    margin: 0px auto;
-    width: 1000px;
+/* ログインボックス */
+.login-box {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    width: 320px;
 }
 
-/* ----- main領域 ----- */
-main {
-    margin: 10px 0px;
+/* タイトル */
+h1 {
+    font-size: 24px;
+    margin-bottom: 24px;
+    color: white;
 }
 
-/* ----- エラーメッセージ用 ----- */
-.errors {
-    color: #ff0000;
+/* 入力フィールド */
+.login-box input[type="email"],
+.login-box input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
 }
 
-/* ----- フォームレイアウト ----- */
+/* ログインボタン */
+.login-box button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #444;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-box button[type="submit"]:hover {
+    background-color: #222;
+}
+
+/* リンク（パス忘れ／新規登録） */
+.login-box a {
+    font-size: 12px;
+    color: #666;
+    text-decoration: none;
+    display: block;
+    margin-top: 10px;
+}
+
+/* フォームエリア全体中央寄せ */
 #form-area {
-    width: 850px;
-    margin: 0px auto;
+    max-width: 360px;
+    margin: 40px auto;
+    padding: 24px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-/* ----- form内一行レイアウト ----- */
+/* フォーム内ラベルと入力欄 */
+.form-center,
 .form-row {
-    margin: 8px auto;
+    margin-bottom: 20px;
+    text-align: left;
 }
 
-/* ----- formラベルタイトルレイアウト ----- */
 .disp-block {
     display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
 }
 
-/* ----- ボタンレイアウト ----- */
+/* エラーメッセージ */
+.error {
+    color: red;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+/* メッセージ表示 */
+.message {
+    color: green;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+/* ログインボタン */
 .btn {
-    background: #0066ff;
-    border: 0;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 1em;
-    padding: 4px 16px;
+    width: 100%;
+    padding: 12px;
+    background-color: #444;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #222;
+}
+
+/* リンクたち（下部） */
+a {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 12px;
+    color: white;
+    text-decoration: none;
+}
+
+/* アイコン画像　*/
+.profile-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #aaa;
+    transition: transform 0.2s ease;
+}
+
+.profile-image:hover {
+    transform: scale(1.05);
 }
