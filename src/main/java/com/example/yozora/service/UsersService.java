@@ -2,6 +2,7 @@ package com.example.yozora.service;
 
 import com.example.yozora.entity.UsersEntity;
 import com.example.yozora.form.PasswordEditForm;
+import com.example.yozora.form.PostDetailForm;
 import com.example.yozora.form.UserEditForm;
 import com.example.yozora.form.UserRegistForm;
 import com.example.yozora.repository.UsersRepository;
@@ -81,6 +82,16 @@ public class UsersService {
         return entity;
     }
 
+    // 投稿idでユーザー情報取得
+    public PostDetailForm getUserByPostId(Integer postId) {
+
+        UsersEntity entity = usersRepository.findUserByPostId(postId);
+
+        PostDetailForm form = convertToPostDetailForm(entity);
+
+        return form;
+    }
+
     // ユーザ情報の更新
     public int editUser(UserEditForm form) {
 
@@ -128,6 +139,14 @@ public class UsersService {
     public UserEditForm convertToForm(UsersEntity entity) {
 
         UserEditForm form = modelMapper.map(entity, UserEditForm.class);
+
+        return form;
+    }
+
+    // エンティティ → フォームに変換：投稿者表示用
+    public PostDetailForm convertToPostDetailForm(UsersEntity entity) {
+
+        PostDetailForm form = modelMapper.map(entity, PostDetailForm.class);
 
         return form;
     }

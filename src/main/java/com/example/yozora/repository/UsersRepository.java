@@ -27,6 +27,26 @@ public class UsersRepository {
         return entity;
     }
 
+    // ユーザーidでユーザーレコード取得（投稿者表示用）
+    public UsersEntity findUserById(Integer id) {
+
+        String sql = "SELECT * FROM users WHERE id = ?";
+
+        UsersEntity entity = jdbcTemplate.queryForObject(sql, new UserRowMapper(), id);
+
+        return entity;
+    }
+
+    // 投稿idでユーザー取得
+    public UsersEntity findUserByPostId(Integer id) {
+
+        String sql = "SELECT * FROM users u JOIN posts p ON u.id = p.user_id WHERE p.id = ?";
+
+        UsersEntity entity = jdbcTemplate.queryForObject(sql, new UserRowMapper(), id);
+
+        return entity;
+    }
+
     // 新規登録用：メールアドレスの重複チェック
     public boolean isUserEmailExists(String email) {
 

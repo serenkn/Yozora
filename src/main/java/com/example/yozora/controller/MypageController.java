@@ -1,8 +1,7 @@
 package com.example.yozora.controller;
 
 import com.example.yozora.entity.UsersEntity;
-import com.example.yozora.entity.PostsEntity;
-import com.example.yozora.form.PostsForm;
+import com.example.yozora.form.PostDetailForm;
 import com.example.yozora.service.UsersService;
 import com.example.yozora.service.PostsService;
 
@@ -30,17 +29,16 @@ public class MypageController {
     }
 
     // マイページ画面の表示
-    @GetMapping("/mypage")
+    @GetMapping(value = "/mypage")
     public String toMypage(@AuthenticationPrincipal User loginUser, Model model) {
 
         // ユーザー情報の取得
         String email = loginUser.getUsername();
         UsersEntity user = usersService.getUserByEmail(email);
-
         model.addAttribute("user", user);
 
         // 投稿一覧の取得
-        List<PostsForm> postList = postsService.getMyPosts(user.getId());
+        List<PostDetailForm> postList = postsService.getMyPosts(user.getId());
 
         if (postList != null && !postList.isEmpty()) {
             model.addAttribute("postList", postList);
@@ -56,8 +54,8 @@ public class MypageController {
     }
 
     // 自分の投稿削除
-    @PostMapping("/post/delete")
-    public String deletePost(@ModelAttribute PostsForm form,
+    @PostMapping(value = "/post/delete")
+    public String deletePost(@ModelAttribute PostDetailForm form,
             BindingResult result,
             Model model,
             @AuthenticationPrincipal User loginUser) {
@@ -71,15 +69,8 @@ public class MypageController {
         // ログインユーザー情報
         UsersEntity user = usersService.getUserByEmail(loginUser.getUsername());
 
-        // 投稿取得 & 所有者確認
-        PostsEntity post = postsService.getPost(form.getId());
-        if (post == null || !post.getUserId().equals(user.getId())) {
-            model.addAttribute("error", "削除権限がありません");
-            return "mypage";
-        }
-
         // 削除処理
-        int rows = postsService.deletePost(form.getId());
+        int rows = postsService.deletePost(user.getId());
         if (rows == 0) {
             model.addAttribute("error", "削除に失敗しました");
             return "mypage";

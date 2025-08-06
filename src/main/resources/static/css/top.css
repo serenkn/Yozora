@@ -1,9 +1,16 @@
 /* ======== リセット & レイアウト ======== */
 html,
 body {
+    height: 100%;
     margin: 0;
     padding: 0;
-    height: 100%;
+    font-family: 'Yu Gothic', sans-serif;
+    background-color: #0a0a0a;
+    color: #fff;
+
+    /* margin: 0;
+    padding: 0;
+    height: 100%; */
 }
 
 main {
@@ -93,36 +100,4 @@ main {
 
 .suggestion-item:hover {
     background-color: #f2f2f2;
-}
-
-/* ======== フッター ======== */
-footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #0a0a0a;
-    text-align: center;
-    padding: 10px 0;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
-    z-index: 20;
-}
-
-.footer-nav {
-    display: flex;
-    justify-content: space-around;
-    max-width: 500px;
-    margin: 0 auto;
-}
-
-.footer-nav a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 8px 16px;
-    border-radius: 20px;
-    transition: background-color 0.3s;
-}
-
-.footer-nav a:hover {
-    background-color: rgba(255, 255, 255, 0.2);
 }

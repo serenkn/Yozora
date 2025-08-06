@@ -5,6 +5,11 @@
     <meta charset="UTF-8">
     <title>マイページ</title>
     <link rel="stylesheet" th:href="@{/css/mypage.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js" defer></script>
+    <script th:src="@{/js/post.js}" defer></script>
+
 </head>
 
 <body>
@@ -22,7 +27,7 @@
             <div class="profile-horizontal">
                 <!-- プロフィール画像 -->
                 <div class="profile-image">
-                    <img th:src="@{${user.profileImage}}" alt="プロフィール画像">
+                    <img th:src="${user.profileImage}" alt="プロフィール画像">
                 </div>
 
                 <!-- プロフィール情報 -->
@@ -40,7 +45,6 @@
             </div>
         </header>
 
-
         <!-- 投稿一覧 -->
         <section class="post-list">
             <!-- 投稿がない場合の表示 -->
@@ -53,21 +57,39 @@
                 <div th:each="post : ${postList}" class="post-item">
 
                     <!-- 画像複数枚表示 -->
-                    <div class="post-images">
-                        <img th:each="img : ${post.imageUrls}" th:src="${img}" alt="投稿画像" class="post-image">
+                    <div class="swiper post-carousel" th:if="${post.imageUrls != null}">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" th:each="img : ${post.imageUrls}">
+                                <img th:src="${img}" alt="投稿画像" class="carousel-image">
+                            </div>
+                        </div>
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
                     </div>
+
+                    <!-- 投稿日時 -->
+                    <p class="post-date" th:text="${#temporals.format(post.createdAt, 'yyyy/MM/dd HH:mm')}"></p>
+
+                    <!-- いいねボタン -->
+                    <button class="likeBtn" th:data-post-id="${post.id}" th:data-liked="${post.liked}"
+                        th:onclick="|toggleLike(this)|">
+                        <span th:if="${post.liked}">⭐</span>
+                        <span th:unless="${post.liked}">★</span>
+                        <span id="like-count" th:text="${post.likeCount}">0</span>
+                    </button>
+
+                    <!--　コメント数 -->
+                    <p class="comments" th:text="'💬 ' + ${post.commentCount}">0</p>
+
+                    <!-- ルートボタン -->
+                    <button type="button" class="route-btn" th:if="${post.latitude != null and post.longitude != null}"
+                        th:onclick="|openGoogleMapsRoute(${post.latitude}, ${post.longitude})|">
+                        📍ルート
+                    </button>
 
                     <!-- タイトル -->
                     <p class="post-title" th:text="${post.title}"></p>
-
-                    <!-- いいね数 -->
-                    <p class="likes" th:text="'♥ ' + ${post.likeCount}"></p>
-
-                    <!-- ルートボタン -->
-                    <form th:action="@{/route}" method="get">
-                        <input type="hidden" name="id" th:value="${post.id}">
-                        <input type="submit" value="ルート案内" class="route-btn">
-                    </form>
 
                     <!-- 本文 -->
                     <p class="post-text" th:text="${post.text}"></p>
@@ -75,20 +97,14 @@
                     <!-- 住所 -->
                     <p class="post-address" th:text="${post.address}"></p>
 
-                    <!-- 投稿日時 -->
-                    <p class="post-date" th:text="${#dates.format(post.createdAt, 'yyyy/MM/dd HH:mm')}"></p>
-
-                    <!-- コメント一覧 -->
-                    <div class="comments">
-                        <ul>
-                            <li th:each="comment : ${post.commentList}" th:text="${comment.text}"></li>
-                        </ul>
-                    </div>
-
+                    <!-- 詳細ページへ -->
+                    <form action="/post">
+                        <input type="hidden" name="id" th:value="${post.id}"></input>
+                        <button type="submit">詳細はこちらへ</button>
+                    </form>
                     <!-- 編集・削除ボタン -->
                     <div class="post-actions">
                         <a th:href="@{/post/edit/{id}(id=${post.id})}" class="btn">編集</a>
-
                         <form th:action="@{/post/delete}" method="post" onsubmit="return confirm('本当に削除しますか？');">
                             <input type="hidden" name="id" th:value="${post.id}">
                             <input type="submit" value="削除" class="delete-btn">
@@ -101,13 +117,8 @@
     </main>
 
     <!-- フッター -->
-    <footer>
-        <nav class="footer-nav">
-            <a th:href="@{/top}">TOP</a>
-            <a th:href="@{/scenery}">景色一覧</a>
-            <a th:href="@{/mypage}">マイページ</a>
-        </nav>
-    </footer>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
 </body>
 
 </html>

@@ -9,6 +9,7 @@ import com.example.yozora.common.annotation.UserEmailExists;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
+// ユーザ登録フォーム
 @Data
 public class UserRegistForm {
 

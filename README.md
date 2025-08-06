@@ -37,4 +37,12 @@
 # 初回セットアップ（Yozora直下で）
 docker compose up --build
 
+gitコマンド
+ステージング→コミット→プッシュ
+
+git add .
+git commit -m "コメント"
+git push origin main
+
+
 http://localhost:8080/login

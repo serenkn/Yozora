@@ -2,7 +2,7 @@ package com.example.yozora.entity;
 
 import lombok.Data;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 //postsテーブル
 @Data
@@ -15,6 +15,6 @@ public class PostsEntity {
     private String address;
     private Double latitude;// 緯度
     private Double longitude;// 経度
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
 }

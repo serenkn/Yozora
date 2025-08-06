@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
+// ユーザ編集フォーム
 @UserEmailDuplicateCheck(message = "メールアドレスが重複しています")
 @Data
 public class UserEditForm {

@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <title>Yozoraスポット</title>
     <link rel="stylesheet" th:href="@{/css/top.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+
 </head>
 
 <body>
-    <p th:if="${message}" class="message" th:text="${message}"></p>
-
     <!-- 地図表示領域 -->
     <main id="map-container">
         <!-- 検索バー＋地図切替ボタン -->
@@ -33,13 +33,7 @@
     </main>
 
     <!-- フッター -->
-    <footer>
-        <nav class="footer-nav">
-            <a th:href="@{/top}">TOP</a>
-            <a th:href="@{/scenry}">景色一覧</a>
-            <a th:href="@{/mypage}">マイページ</a>
-        </nav>
-    </footer>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 
     <!-- 投稿データのJS埋め込み -->
     <script th:inline="javascript">
@@ -50,6 +44,8 @@
 
     <!-- 外部JS -->
     <script th:src="@{/js/script.js}"></script>
+    <script th:src="@{/js/post.js}"></script>
+
 
     <!-- APIを読み込み　-->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsqURmvn6hJLiRn1-eqrGC5aoSdXHW-Yg&callback=initMap"
