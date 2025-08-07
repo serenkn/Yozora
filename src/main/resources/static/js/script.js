@@ -79,34 +79,27 @@ function addPostMarkers(posts) {
                             style="width: 100%; border-radius: 4px;"
                             onerror="this.src='/images/default-image.jpg'">
                     </div>
-
-                    <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; font-size: 13px; color: black;">
-                        <div>${post.createdAt}</div>
-                        <div>⭐ ${post.likeCount}</div>
-                        <div>💬 ${post.c < div class="comment-summary" >
-                💬 コメント < span th: text = "${post.commentList.size()}" > 0</span > 件
-            </div > ommentCount
-        }</div >
-        <button type="button" onclick="openGoogleMapsRoute(${post.latitude}, ${post.longitude})"
-            style="background: none; border: none; font-size: 14px; color: #007bff; cursor: pointer;">
-            📍ルート
-        </button>
-                    </div >
-
+                    
                     <div style="margin-top: 4px;">
                         <strong style="font-size: 14px; color: black;">${post.title}</strong>
                     </div>
 
-                    <div style="font-size: 13px; color: black;">
-                        ${post.address}
+                    <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; font-size: 13px; color: black;">
+                        <div>${post.createdAt}</div>
+                        <div>⭐ ${post.likeCount}</div>
+                        <div>💬 ${post.commentCount}</div>
+                        <button type="button" onclick="openGoogleMapsRoute(${post.latitude}, ${post.longitude})"
+                            style="background: none; border: none; font-size: 14px; color: #007bff; cursor: pointer;">
+                            📍ルート
+                        </button>
                     </div>
 
                     <form action="/post" style="text-align: right; margin-top: 6px;">
                         <input type="hidden" name="id" value="${post.id}">
                         <button type="submit" style="font-size: 13px; color: #007bff;">詳細はこちらへ</button>
                     </form>
-                </div >
-            `;
+                </div>
+                `;
             infoWindow.setContent(content);
             infoWindow.open(map, marker);
         });
@@ -124,20 +117,34 @@ function reverseGeocodeAndShowLink(lat, lng) {
         if (status === "OK" && results[0]) {
             const address = results[0].formatted_address;
 
+            // 既存の一時ピン・InfoWindow を削除
             if (tempMarker) tempMarker.setMap(null);
             if (tempInfoWindow) tempInfoWindow.close();
 
-            tempMarker = new google.maps.Marker({ position: latlng, map: map });
+            // 新しい仮ピン追加
+            tempMarker = new google.maps.Marker({
+                position: latlng,
+                map: map
+            });
 
+            // InfoWindow 表示
             tempInfoWindow = new google.maps.InfoWindow({
                 content: `
-            < div >
-                  <a href="/postCreate?lat=${lat}&lng=${lng}&address=${encodeURIComponent(address)}">投稿する</a><br>
-                  <button onclick="tempInfoWindow.close()">閉じる</button>
-                  </div>`
+                    <div>
+                        <a href="/postCreate?lat=${lat}&lng=${lng}&address=${encodeURIComponent(address)}">投稿する</a>
+                    </div>`
             });
 
             tempInfoWindow.open(map, tempMarker);
+
+            // ×ボタンでピンも消す
+            tempInfoWindow.addListener("closeclick", () => {
+                if (tempMarker) {
+                    tempMarker.setMap(null);
+                    tempMarker = null;
+                }
+            });
+
         } else {
             alert("住所の取得に失敗しました: " + status);
         }
@@ -167,7 +174,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             matched.forEach(post => {
                 const li = document.createElement("li");
-                li.textContent = `${ post.title }（${ post.address }）`;
+                li.textContent = `${post.title}（${post.address}）`;
                 li.classList.add("suggestion-item");
                 li.addEventListener("click", function () {
                     map.panTo({ lat: post.latitude, lng: post.longitude });
@@ -178,6 +185,23 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             suggestions.classList.toggle("hidden", matched.length === 0);
+        });
+    }
+});
+
+// ==================== バツボタンで仮ピン削除 ====================
+document.addEventListener("DOMContentLoaded", function () {
+    const cancelBtn = document.getElementById("cancel-button");
+    if (cancelBtn) {
+        cancelBtn.addEventListener("click", function () {
+            if (tempMarker) {
+                tempMarker.setMap(null);
+                tempMarker = null;
+            }
+            if (tempInfoWindow) {
+                tempInfoWindow.close();
+                tempInfoWindow = null;
+            }
         });
     }
 });

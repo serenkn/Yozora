@@ -130,7 +130,7 @@ public class PostsController {
 
         // 投稿詳細取得
         PostDetailForm form = postsService.getPostDetail(postId);
-        PostDetailForm userList = usersService.getUserByPostId(postId);
+        PostDetailForm userList = usersService.getUserByPostId(postId);// 投稿者取得
         form.setUserName(userList.getUserName());
         form.setProfileImage(userList.getProfileImage());
         // ログインユーザー取得

@@ -32,7 +32,9 @@
         <div class="meta-info">
 
             <!-- 投稿日-->
-            <p class="post-date" th:text="${#temporals.format(post.createdAt, 'yyyy/MM/dd HH:mm')}"></p>
+            <p class="post-time date-time" th:text="${post.createdAt}"></p>
+            <!-- <p class="post-date relative-time"
+                th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd''T''HH:mm:ss')}"></p> -->
 
             <!-- いいねボタン -->
             <button class="likeBtn" th:data-post-id="${post.id}" th:data-liked="${post.liked}"
@@ -114,7 +116,6 @@
     <script>
         window.addEventListener("pageshow", function (event) {
             if (event.persisted) {
-                // 履歴キャッシュから戻った時にリロードする
                 location.reload();
             }
         });

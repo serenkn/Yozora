@@ -9,6 +9,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js" defer></script>
     <script th:src="@{/js/post.js}" defer></script>
+    <script>
+        window.addEventListener("pageshow", function (event) {
+            if (event.persisted) {
+                location.reload();
+            }
+        });
+    </script>
 
 </head>
 
@@ -98,10 +105,11 @@
                     <p class="post-address" th:text="${post.address}"></p>
 
                     <!-- 詳細ページへ -->
-                    <form action="/post">
+                    <form action="/post" class="detail-link">
                         <input type="hidden" name="id" th:value="${post.id}"></input>
                         <button type="submit">詳細はこちらへ</button>
                     </form>
+
                     <!-- 編集・削除ボタン -->
                     <div class="post-actions">
                         <a th:href="@{/post/edit/{id}(id=${post.id})}" class="btn">編集</a>

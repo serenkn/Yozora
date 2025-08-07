@@ -45,6 +45,13 @@
     <!-- 外部JS -->
     <script th:src="@{/js/script.js}"></script>
     <script th:src="@{/js/post.js}"></script>
+    <script>
+        window.addEventListener("pageshow", function (event) {
+            if (event.persisted) {
+                location.reload();
+            }
+        });
+    </script>
 
 
     <!-- APIを読み込み　-->

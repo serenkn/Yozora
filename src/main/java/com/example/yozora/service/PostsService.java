@@ -43,7 +43,7 @@ public class PostsService {
         this.modelMapper = modelMapper;
     }
 
-    // 全ての投稿を取得するメソッド:top画面で使用（ログインユーザー用）
+    // 全ての投稿を取得するメソッド:top画面、scenery画面（最新順）で使用（ログインユーザー用）
     public List<PostDetailForm> getAllPosts(Integer userId) {
 
         List<PostAllEntity> entityList = postsRepository.findAllPost(userId);
@@ -85,6 +85,7 @@ public class PostsService {
                 form.setUserName(entity.getUserName());
                 form.setProfileImage(entity.getProfileImage());
                 form.setLikeCount(entity.getLikeCount());
+                form.setCommentCount(entity.getCommentCount());
                 form.setImageUrls(new ArrayList<>());
 
                 postMap.put(postId, form);
@@ -118,7 +119,7 @@ public class PostsService {
             boolean exists = likesRepository.likedPost(form.getId(), userId);
             form.setLiked(exists);
 
-            // コメント一覧を取得
+            // コメント数を取得
             int commentCount = commentsRepository.commentCountByPostId(form.getId());
             form.setCommentCount(commentCount);
         }
@@ -137,9 +138,11 @@ public class PostsService {
         int likeCount = likesRepository.LikeCountByPostId(form.getId());
         form.setLikeCount(likeCount);
 
-        // コメント数を取得
+        // コメント数、一覧を取得
+        int commentCount = commentsRepository.commentCountByPostId(postId);
         List<CommentWithUserEntity> commentlist = commentsRepository.findWithUserByPostId(form.getId());
         form.setCommentList(commentlist);
+        form.setCommentCount(commentCount);
 
         return form;
     }

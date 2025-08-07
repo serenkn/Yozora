@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>景色一覧</title>
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js" defer></script>
+    <script th:src="@{/js/post.js}" defer></script>
+    <script>
+        window.addEventListener("pageshow", function (event) {
+            if (event.persisted) {
+                location.reload();
+            }
+        });
+    </script>
+
+</head>
+
+<body>
+    <main>
+        <header>
+            <!-- 並び替えタブ -->
+            <div class="sort-tabs">
+                <a th:href="/scenery" class="sort-tab">最新順</a>
+                <a th:href="/scenery/popular" class="sort-tab">人気順</a>
+                <a th:href="/scenery/random" class="sort-tab">ランダム順</a>
+                <a th:href="/scenery/oldest" class="sort-tab">過去順</a>
+            </div>
+        </header>
+
+        <!-- 投稿一覧 -->
+        <section class="post-list">
+            <!-- 投稿がない場合の表示 -->
+            <div class="no-posts" th:if="${postList == null or postList.isEmpty()}">
+                <p>投稿がありません</p>
+            </div>
+
+            <!-- 投稿がある場合の表示 -->
+            <div class="posts-container" th:if="${postList != null and !postList.isEmpty()}">
+                <div th:each="post : ${postList}" class="post-item">
+
+                    <!-- 画像複数枚表示 -->
+                    <div class="swiper post-carousel" th:if="${post.imageUrls != null}">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" th:each="img : ${post.imageUrls}">
+                                <img th:src="${img}" alt="投稿画像" class="carousel-image">
+                            </div>
+                        </div>
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+                    </div>
+
+                    <!-- タイトル -->
+                    <p class="post-title" th:text="${post.title}"></p>
+
+                    <!-- 投稿日時 -->
+                    <p class="post-date" th:text="${#temporals.format(post.createdAt, 'yyyy/MM/dd HH:mm')}"></p>
+
+                    <!-- いいねボタン -->
+                    <button class="likeBtn" th:data-post-id="${post.id}" th:data-liked="${post.liked}"
+                        th:onclick="|toggleLike(this)|">
+                        <span th:if="${post.liked}">⭐</span>
+                        <span th:unless="${post.liked}">★</span>
+                        <span id="like-count" th:text="${post.likeCount}">0</span>
+                    </button>
+
+                    <!--　コメント数 -->
+                    <p class="comments" th:text="'💬 ' + ${post.commentCount}">0</p>
+
+                    <!-- ルートボタン -->
+                    <button type="button" class="route-btn" th:if="${post.latitude != null and post.longitude != null}"
+                        th:onclick="|openGoogleMapsRoute(${post.latitude}, ${post.longitude})|">
+                        📍ルート
+                    </button>
+
+                    <!-- 本文 -->
+                    <p class="post-text" th:text="${post.text}"></p>
+
+                    <!-- 住所 -->
+                    <p class="post-address" th:text="${post.address}"></p>
+
+                    <!-- 詳細ページへ -->
+                    <form action="/post" class="detail-link">
+                        <input type="hidden" name="id" th:value="${post.id}"></input>
+                        <button type="submit">詳細はこちらへ</button>
+                    </form>
+                    <!-- コメント数 -->
+                    <div class="comment-summary">
+                        💬 コメント <span th:text="${post.commentList.size()}">0</span>件
+                    </div>
+
+                    <!-- コメント投稿フォーム -->
+                    <form th:action="@{/comment/add}" th:object="${commentForm}" method="post" class="comment-form">
+                        <input type="hidden" th:field="*{postId}">
+                        <input type="text" th:field="*{text}" placeholder="コメントを入力">
+                        <button type="submit">投稿</button>
+                    </form>
+
+                    <!-- コメント一覧 -->
+                    <div class="comment-section">
+                        <div class="comment" th:each="comment : ${post.commentList}">
+                            <div class="comment-header">
+                                <img th:src="@{${comment.profileImage}}" alt="プロフィール画像" class="comment-icon">
+                                <span class="comment-username" th:text="${comment.userName}"></span>
+                            </div>
+
+                            <div class="comment-body" th:text="${comment.text}"></div>
+
+                            <!-- 自分のコメントのみ編集・削除表示 -->
+                            <div th:if="${comment.userId == post.loginUserId}" class="comment-actions">
+                                <button type="button" th:data-id="${comment.id}"
+                                    onclick="openEditModal(this)">編集</button>
+                                <form th:action="@{/comment/delete}" method="post">
+                                    <input type="hidden" name="commentId" th:value="${comment.id}"></input>
+                                    <button type="submit">削除</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- フッター -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+
+</html>
