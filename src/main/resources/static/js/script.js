@@ -73,19 +73,21 @@ function addPostMarkers(posts) {
                             <span style="font-size: 14px; color: black;">${post.userName}</span>
                         </div>
                     </div>
+                    
+                    <div style="margin-top: 4px;">
+                        <strong style="font-size: 14px; color: black;">${post.title}</strong>
+                    </div>
 
                     <div style="margin-top: 8px;">
                         <img src="${post.imageUrls[0]}" alt="投稿画像"
                             style="width: 100%; border-radius: 4px;"
                             onerror="this.src='/images/default-image.jpg'">
                     </div>
-                    
-                    <div style="margin-top: 4px;">
-                        <strong style="font-size: 14px; color: black;">${post.title}</strong>
-                    </div>
 
                     <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; font-size: 13px; color: black;">
                         <div>${post.createdAt}</div>
+                        <p class="post-time date-time" th:text="${post.createdAt}"></p>
+
                         <div>⭐ ${post.likeCount}</div>
                         <div>💬 ${post.commentCount}</div>
                         <button type="button" onclick="openGoogleMapsRoute(${post.latitude}, ${post.longitude})"

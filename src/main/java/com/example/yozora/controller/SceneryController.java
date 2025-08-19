@@ -33,6 +33,7 @@ public class SceneryController {
         String email = loginUser.getUsername();
         UsersEntity user = usersService.getUserByEmail(email);
         Integer loginUserId = user.getId();
+        model.addAttribute("loginUserId", loginUserId);
 
         List<PostDetailForm> postList = postsService.getAllPosts(loginUserId);
 
@@ -42,31 +43,51 @@ public class SceneryController {
     }
 
     // 人気順（いいね数）で並び替え
-    // @GetMapping("/scenery/popular")
-    // public String toPopular(@AuthenticationPrincipal User loginUser, Model model)
-    // {
-    // String email = loginUser.getUsername();
-    // UsersEntity user = usersService.getUserByEmail(email);
-    // Integer loginUserId = user.getId();
+    @GetMapping("/scenery/popular")
+    public String toPopular(@AuthenticationPrincipal User loginUser, Model model) {
 
-    // List<PostDetailForm> postList =
-    // postsService.getAllPostsOrderByLikeCount(loginUserId);
-    // model.addAttribute("postList", postList);
+        // ユーザー情報の取得
+        String email = loginUser.getUsername();
+        UsersEntity user = usersService.getUserByEmail(email);
+        Integer loginUserId = user.getId();
 
-    // return "scenery";
-    // }
+        List<PostDetailForm> postList = postsService.getAllPostsPopular(loginUserId);
+
+        model.addAttribute("postList", postList);
+
+        return "scenery";
+    }
 
     // ランダム順
-    // @GetMapping("/scenery/random")
-    // public String toRandom(@AuthenticationPrincipal User loginUser, Model model)
-    // {
-    // String email = loginUser.getUsername();
-    // UsersEntity user = usersService.getUserByEmail(email);
-    // Integer loginUserId = user.getId();
+    @GetMapping("/scenery/random")
+    public String toRandom(@AuthenticationPrincipal User loginUser, Model model) {
 
-    // List<PostDetailForm> postList = postsService.getAllPostsRandom(loginUserId);
-    // model.addAttribute("postList", postList);
+        // ユーザー情報の取得
+        String email = loginUser.getUsername();
+        UsersEntity user = usersService.getUserByEmail(email);
+        Integer loginUserId = user.getId();
 
-    // return "scenery";
-    // }
+        List<PostDetailForm> postList = postsService.getAllPostsRandom(loginUserId);
+
+        model.addAttribute("postList", postList);
+
+        return "scenery";
+    }
+
+    // 過去順
+    @GetMapping("/scenery/oldest")
+    public String toOldest(@AuthenticationPrincipal User loginUser, Model model) {
+
+        // ユーザー情報の取得
+        String email = loginUser.getUsername();
+        UsersEntity user = usersService.getUserByEmail(email);
+        Integer loginUserId = user.getId();
+
+        List<PostDetailForm> postList = postsService.getAllPostsOldest(loginUserId);
+
+        model.addAttribute("postList", postList);
+
+        return "scenery";
+    }
+
 }

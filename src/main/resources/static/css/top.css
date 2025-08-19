@@ -1,24 +1,34 @@
-/* ======== リセット & レイアウト ======== */
+/* ======== レイアウト ======== */
+:root {
+    --footer-h: 50px;
+    /* フッターの高さ */
+}
+
 html,
 body {
     height: 100%;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
     font-family: 'Yu Gothic', sans-serif;
     background-color: #0a0a0a;
     color: #fff;
-
-    /* margin: 0;
-    padding: 0;
-    height: 100%; */
 }
 
 main {
     position: relative;
-    height: calc(100% - 60px);
-    /* ← フッター高さに合わせて調整（必要に応じて微調整） */
+    /* flex: 1; */
+    height: 100vh;
+    /* height: calc(100vh - 50px); */
     width: 100%;
 }
+
+/* main {
+    flex: 1;
+    /* overflow-y: auto;
+    padding-bottom: 50px; 
+}*/
 
 /* ======== Google Mapエリア ======== */
 #map {
@@ -27,7 +37,8 @@ main {
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 0;
+    height: 100%;
+    width: 100%;
 }
 
 /* ======== UI配置（左上まとめ） ======== */

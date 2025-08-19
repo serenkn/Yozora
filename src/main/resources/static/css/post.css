@@ -1,0 +1,323 @@
+/* ================== 基本 ================== */
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Yu Gothic', sans-serif;
+    background: #0a0a0a;
+    color: #fff;
+}
+
+main {
+    max-width: min(680px, 92vw);
+    margin: 16px auto 80px;
+}
+
+/* ================== 戻るボタン ================== */
+button[onclick="history.back()"] {
+    margin: 8px 0 12px;
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button[onclick="history.back()"]:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* ================== ユーザー情報（Twitter風横並び） ================== */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 6px 0 8px;
+}
+
+.user-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ================== タイトル ================== */
+h2 {
+    margin: 6px 0 10px;
+    font-size: 1.15rem;
+    line-height: 1.35;
+}
+
+/* ================== 画像カルーセル（詳細は“画像そのまま表示”） ================== */
+.post-carousel {
+    border-radius: 10px;
+    overflow: hidden;
+    background: #111;
+    margin: 10px 0;
+}
+
+.post-carousel .swiper,
+.post-carousel .swiper-wrapper,
+.post-carousel .swiper-slide {
+    height: auto;
+    /* 画像の高さに追随（トリミング無し） */
+}
+
+.carousel-image {
+    width: 100%;
+    height: auto;
+    /* ← そのまま表示 */
+    display: block;
+    object-fit: unset;
+    /* cover/contain を無効化 */
+    object-position: center;
+}
+
+/* Swiper UI（見やすく） */
+.post-carousel .swiper-button-prev,
+.post-carousel .swiper-button-next {
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+}
+
+.post-carousel .swiper-pagination-bullet {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.post-carousel .swiper-pagination-bullet-active {
+    background: #fff;
+}
+
+/* ================== メタ行：左に日時／右にボタン群 ================== */
+.post-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.post-time {
+    font-size: 12px;
+    color: #aeb3bd;
+    margin: 0;
+}
+
+.post-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+    /* ボタン間の間隔 */
+    margin: 0;
+}
+
+.likeBtn,
+.route-btn,
+.comment-summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    /* ヒットエリアを広めに */
+    margin: 0;
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.likeBtn:hover,
+.route-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.comment-summary {
+    cursor: default;
+}
+
+/* ここは表示のみ */
+
+/* ================== 本文・住所 ================== */
+.post-text {
+    margin: 10px 0 6px;
+    line-height: 1.7;
+}
+
+.post-address {
+    color: #cfcfcf;
+    font-size: .95rem;
+    margin-bottom: 12px;
+}
+
+/* ================== 編集ボタン（自分の投稿のみ） ================== */
+.edit-area {
+    display: flex;
+    justify-content: flex-end;
+    margin: 8px 0 16px;
+}
+
+.edit-button {
+    display: inline-block;
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 8px;
+    color: #fff;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.edit-button:hover {
+    background: rgba(255, 255, 255, 0.14);
+}
+
+/* ================== コメントサマリ・フォーム ================== */
+.comment-summary {
+    margin: 8px 0;
+}
+
+.comment-form {
+    display: flex;
+    gap: 8px;
+    margin: 8px 0 14px;
+}
+
+.comment-form input[type="text"] {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: #0f0f0f;
+    color: #fff;
+}
+
+.comment-form button {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.10);
+    color: #fff;
+    cursor: pointer;
+}
+
+.comment-form button:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+/* ================== コメント一覧 ================== */
+.comment-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 6px;
+}
+
+.comment {
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.comment-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.comment-username {
+    font-weight: 600;
+}
+
+.comment-date {
+    margin-left: auto;
+    font-size: 12px;
+    color: #aeb3bd;
+}
+
+.comment-body {
+    margin-top: 4px;
+    color: #e6e6e6;
+    line-height: 1.6;
+}
+
+.comment-actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+}
+
+.comment-actions button,
+.comment-actions form button {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.10);
+    color: #fff;
+    cursor: pointer;
+}
+
+.comment-actions form button {
+    border-color: rgba(255, 80, 80, 0.5);
+    background: rgba(255, 80, 80, 0.12);
+}
+
+.comment-actions form button:hover {
+    background: rgba(255, 80, 80, 0.22);
+}
+
+/* ================== モーダル（簡易） ================== */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.modal form {
+    width: min(640px, 92vw);
+    background: #111;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 12px;
+    padding: 14px;
+    display: grid;
+    gap: 10px;
+}
+
+.modal textarea {
+    min-height: 140px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: #0f0f0f;
+    color: #fff;
+    padding: 10px 12px;
+}
+
+/* ================== スマホ微調整 ================== */
+@media (max-width: 480px) {
+    .post-actions {
+        gap: 12px;
+    }
+
+    .comment-date {
+        font-size: 11px;
+    }
+}

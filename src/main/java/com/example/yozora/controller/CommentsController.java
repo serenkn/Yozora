@@ -25,17 +25,19 @@ public class CommentsController {
         this.usersService = usersService;
     }
 
-    // コメント新規追加処理
-    @PostMapping("/comment/add")
-    public String addComment(
+    // コメント新規追加
+    @PostMapping(value = "/comment/add")
+    public String addCommentByScenerey(
             @Validated @ModelAttribute CommentForm form,
             BindingResult result,
             @AuthenticationPrincipal User loginUser,
+            @RequestParam(value = "ret", required = false) String ret,
             Model model) {
 
+        String target = (ret != null && ret.startsWith("/")) ? ret : "/scenery";
+
         if (result.hasErrors()) {
-            model.addAttribute("error", "コメントを入力してください。");
-            return "post";
+            return "redirect:" + target;
         }
 
         String email = loginUser.getUsername();
@@ -49,22 +51,26 @@ public class CommentsController {
         if (row == 0) {
             model.addAttribute("error", "コメントに失敗しました。");
         }
-        return "redirect:/post?id=" + form.getPostId();
+
+        return "redirect:" + target;
     }
 
     // コメント編集
     @PostMapping("/comment/edit")
-    public String editComment(
+    public String editCommentByPost(
             @Validated @ModelAttribute CommentForm form,
             BindingResult result,
             @AuthenticationPrincipal User loginUser,
+            @RequestParam(value = "ret", required = false) String ret,
             Model model) {
 
+        String target = (ret != null && ret.startsWith("/")) ? ret : "/scenery";
+
         if (result.hasErrors()) {
-            model.addAttribute("error", "コメントを入力してください。");
+
             model.addAttribute("editTargetId", form.getId());
 
-            return "post";
+            return "redirect:" + target;
         }
 
         String email = loginUser.getUsername();
@@ -78,7 +84,7 @@ public class CommentsController {
             model.addAttribute("error", "コメントの編集できませんでした。");
         }
 
-        return "redirect:/post";
+        return "redirect:" + target;
     }
 
     // コメント削除処理
@@ -86,15 +92,17 @@ public class CommentsController {
     public String deleteComment(
             @ModelAttribute CommentForm form,
             @AuthenticationPrincipal User loginUser,
+            @RequestParam(value = "ret", required = false) String ret,
             Model model) {
+
+        String target = (ret != null && ret.startsWith("/")) ? ret : "/scenery";
 
         int row = commentsService.deleteComment(form.getId());
 
         if (row == 0) {
             model.addAttribute("error", "削除に失敗しました。");
-            return "post";
+            return "redirect:" + target;
         }
-        return "redirect:/post";
-
+        return "redirect:" + target;
     }
 }

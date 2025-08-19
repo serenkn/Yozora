@@ -1,11 +1,12 @@
-// ======== ページ種別の取得（create/edit の時のみ true） ========
+// ===== ページ種別（create/edit の時のみ true） =====
 const page = document.body.dataset.page;
 const showDelete = (page === 'create' || page === 'edit');
 
-// ======== Swiper 初期化関数 ========
+// ===== Swiper 初期化 =====
 let swiper;
 function initSwiper() {
     swiper = new Swiper('.swiper', {
+        autoHeight: true,
         loop: false,
         slidesPerView: 1,
         navigation: {
@@ -19,7 +20,24 @@ function initSwiper() {
     });
 }
 
-// ======== 新規・編集ページ用：画像アップロード & プレビュー ========
+// プロフィール画像プレビュー
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('imageInput');
+    const preview = document.getElementById('profilePreview');
+
+    input?.addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+});
+
+// ===== 新規・編集：画像アップロード & プレビュー =====
 function initImageUploadWithPreview() {
     initSwiper();
 
@@ -79,12 +97,12 @@ function initImageUploadWithPreview() {
     }
 }
 
-// ======== 投稿詳細ページ用 Swiper 初期化 ========
+// ===== 投稿詳細：Swiper 初期化 =====
 function initDetailView() {
     initSwiper();
 }
 
-// ======== Google マップへルート案内 ========
+// ===== Google マップへルート案内 =====
 function openGoogleMapsRoute(destLat, destLng) {
     if (!destLat || !destLng) {
         alert("目的地の位置情報が取得できません");
@@ -94,7 +112,7 @@ function openGoogleMapsRoute(destLat, destLng) {
     window.open(url, '_blank');
 }
 
-// ======== いいねトグル機能 ========
+// ===== いいねトグル =====
 function toggleLike(button) {
     const postId = button.dataset.postId;
     const liked = button.dataset.liked === "true";
@@ -125,21 +143,102 @@ function toggleLike(button) {
         });
 }
 
-// ======== コメント編集モーダル ========
-function openEditModal(button) {
+// ===== 編集モーダル =====
+window.openEditModal = function (button) {
     const commentId = button.dataset.id;
-    const commentText = button.closest('.comment').querySelector('.comment-body').textContent;
+    const commentText = button.closest('.comment').querySelector('.comment-body').innerText;
 
     document.getElementById("editCommentId").value = commentId;
     document.getElementById("editCommentText").value = commentText;
+
+    // いまのURLを戻り先として付与（編集）
+    const ret = encodeURIComponent(location.pathname + location.search);
+    const editForm = document.querySelector('#editModal form');
+    if (editForm) editForm.action = '/comment/edit?ret=' + ret;
+
     document.getElementById("editModal").style.display = "block";
-}
+};
 
-function closeEditModal() {
+window.closeEditModal = function () {
     document.getElementById("editModal").style.display = "none";
+};
+
+// ===== コメントモーダル =====
+function openCommentModal(button) {
+    const postId = button.dataset.postId || "";
+    const count = button.dataset.count ? parseInt(button.dataset.count, 10) : 0;
+
+    // 埋め込みJSONを展開
+    const jsonEl = document.getElementById(`comments-${postId}`);
+    let comments = [];
+    if (jsonEl && jsonEl.textContent) {
+        try { comments = JSON.parse(jsonEl.textContent); } catch (_) { comments = []; }
+    }
+
+    const listEl = document.getElementById('cm-list');
+    const countEl = document.getElementById('cm-count');
+    const postIdEl = document.getElementById('cm-postId');
+
+    // 件数
+    countEl.textContent = Number.isFinite(count) && count >= 0 ? count : comments.length;
+
+    // hidden の postId
+    postIdEl.value = postId;
+
+    // いまのURLを戻り先として付与（追加・削除）
+    const ret = encodeURIComponent(location.pathname + location.search);
+
+    // 追加フォームの action を差し替え
+    const addForm = document.querySelector('#commentModal form');
+    if (addForm) addForm.action = '/comment/add?ret=' + ret;
+
+    // ログインユーザーID（必ず存在する前提）
+    const loginUserId = document.getElementById('loginUserId').value;
+
+    // コメント描画（本人のみ編集/削除表示）
+    listEl.innerHTML = (comments && comments.length)
+        ? comments.map(c => {
+            const isMine = String(c.userId) === String(loginUserId);
+            return `
+          <div class="comment" data-user-id="${c.userId}">
+            <div class="comment-header">
+              <img src="${c.profileImage || ''}" alt="" class="comment-icon">
+              <span class="comment-username">${c.userName || ''}</span>
+              <span class="comment-date date-time">${c.createdAt || ''}</span>
+            </div>
+            <div class="comment-body">${c.text || ''}</div>
+            ${isMine ? `
+              <div class="comment-actions">
+                <button type="button" onclick="openEditModal(this)" data-id="${c.id}">編集</button>
+                <form method="post" action="/comment/delete?ret=${ret}" style="display:inline;">
+                  <input type="hidden" name="id" value="${c.id}">
+                  <button type="submit">削除</button>
+                </form>
+              </div>
+            ` : ""}
+          </div>
+        `;
+        }).join("")
+        : `<div class="comment"><div class="comment-body">まだコメントはありません</div></div>`;
+
+    // 日付の相対表示（定義があれば）
+    if (typeof dateConvertTimes === "function") {
+        try { dateConvertTimes(); } catch (_) { }
+    }
+
+    const modal = document.getElementById('commentModal');
+    modal.style.display = 'flex';
+    document.body.classList.add('modal-open');
 }
 
-// ======== 日付変換 ========
+// コメントモーダルを閉じる
+function closeCommentModal() {
+    const modal = document.getElementById('commentModal');
+    modal.style.display = 'none';
+    document.body.classList.remove('modal-open');
+}
+
+// ===== 日付変換 =====
 function formatDateTime(dateTimeString) {
     const now = new Date();
     const target = new Date(dateTimeString);
@@ -171,7 +270,7 @@ function dateConvertTimes() {
     });
 }
 
-// ======== スクロール復元 ========
+// ===== スクロール復元 =====
 function restoreScrollPosition() {
     const detailLinks = document.querySelectorAll(".detail-link");
     detailLinks.forEach(link => {
@@ -187,7 +286,7 @@ function restoreScrollPosition() {
     }
 }
 
-// ======== 初期化処理 ========
+// ===== 初期化 =====
 function init() {
     if (showDelete) {
         initImageUploadWithPreview();

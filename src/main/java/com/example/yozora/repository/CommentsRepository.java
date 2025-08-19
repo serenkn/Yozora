@@ -94,6 +94,28 @@ public class CommentsRepository {
         return comment;
     }
 
+    // コメント一覧全取得：コメント + コメント者
+    public List<CommentWithUserEntity> findCommentWithUser() {
+
+        String sql = """
+                SELECT
+                    c.id,
+                    c.post_id,
+                    c.user_id,
+                    c.text,
+                    c.created_at,
+                    u.user_name,
+                    u.profile_image
+                FROM comments c
+                JOIN users u ON c.user_id = u.id
+                ORDER BY c.created_at DESC
+                """;
+
+        List<CommentWithUserEntity> commentList = jdbcTemplate.query(sql, new CommentWithUserRowMapper());
+
+        return commentList;
+    }
+
     // 投稿IDからコメント+ユーザー情報取得（出力表示用）
     public List<CommentWithUserEntity> findWithUserByPostId(Integer postId) {
 

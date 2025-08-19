@@ -21,7 +21,7 @@ h1 {
 
 /* フォームエリア全体中央寄せ */
 #form-area {
-    max-width: 360px;
+    max-width: 250px;
     margin: 40px auto;
     padding: 24px;
     background-color: rgba(255, 255, 255, 0.95);
@@ -61,7 +61,7 @@ h1 {
     margin-bottom: 16px;
 }
 
-/* ログインボタン（共通ボタン） */
+/* ログインボタン */
 .btn {
     width: 100%;
     padding: 12px;
@@ -78,7 +78,7 @@ h1 {
     background-color: #222;
 }
 
-/* 下部リンク */
+/* リンクたち（下部） */
 a {
     display: block;
     text-align: center;
@@ -86,4 +86,44 @@ a {
     font-size: 12px;
     color: white;
     text-decoration: none;
+}
+
+/* 削除ボタン */
+.link-button {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 12px;
+    color: white;
+    text-decoration: none;
+}
+
+/* アイコン画像　*/
+.profile-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #aaa;
+    transition: transform 0.2s ease;
+    display: block;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+/* ファイルクリック範囲 */
+label[for="imageInput"] {
+    width: 120px;
+    height: 120px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    overflow: hidden;
+
+
+}
+
+.profile-image:hover {
+    transform: scale(1.05);
 }

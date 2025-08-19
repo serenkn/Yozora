@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>景色一覧</title>
+    <link rel="stylesheet" th:href="@{/css/scenery.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js" defer></script>
@@ -15,7 +16,6 @@
             }
         });
     </script>
-
 </head>
 
 <body>
@@ -23,12 +23,14 @@
         <header>
             <!-- 並び替えタブ -->
             <div class="sort-tabs">
-                <a th:href="/scenery" class="sort-tab">最新順</a>
-                <a th:href="/scenery/popular" class="sort-tab">人気順</a>
-                <a th:href="/scenery/random" class="sort-tab">ランダム順</a>
-                <a th:href="/scenery/oldest" class="sort-tab">過去順</a>
+                <a th:href="@{/scenery}" class="sort-tab">最新順</a>
+                <a th:href="@{/scenery/popular}" class="sort-tab">人気順</a>
+                <a th:href="@{/scenery/random}" class="sort-tab">ランダム順</a>
+                <a th:href="@{/scenery/oldest}" class="sort-tab">過去順</a>
             </div>
         </header>
+
+        <input type="hidden" id="loginUserId" th:value="${loginUserId}">
 
         <!-- 投稿一覧 -->
         <section class="post-list">
@@ -39,7 +41,16 @@
 
             <!-- 投稿がある場合の表示 -->
             <div class="posts-container" th:if="${postList != null and !postList.isEmpty()}">
-                <div th:each="post : ${postList}" class="post-item">
+                <div th:each="post : ${postList}" class="post-item" th:attr="data-post-id=${post.id}">
+
+                    <!-- 投稿者情報 -->
+                    <div class="user-info">
+                        <img th:src="@{${post.profileImage}}" class="user-icon" alt="アイコン">
+                        <span th:text="${post.userName}"></span>
+                    </div>
+
+                    <!-- タイトル -->
+                    <p class="post-title" th:text="${post.title}"></p>
 
                     <!-- 画像複数枚表示 -->
                     <div class="swiper post-carousel" th:if="${post.imageUrls != null}">
@@ -53,28 +64,37 @@
                         <div class="swiper-button-next"></div>
                     </div>
 
-                    <!-- タイトル -->
-                    <p class="post-title" th:text="${post.title}"></p>
+                    <div class="post-meta">
+                        <!-- 投稿日時 -->
+                        <p class="post-time date-time" th:text="${post.createdAt}"></p>
 
-                    <!-- 投稿日時 -->
-                    <p class="post-date" th:text="${#temporals.format(post.createdAt, 'yyyy/MM/dd HH:mm')}"></p>
+                        <div class="post-actions">
+                            <!-- いいねボタン -->
+                            <button class="likeBtn" th:data-post-id="${post.id}" th:data-liked="${post.liked}"
+                                th:onclick="|toggleLike(this)|">
+                                <span th:if="${post.liked}">⭐</span>
+                                <span th:unless="${post.liked}">★</span>
+                                <span id="like-count" th:text="${post.likeCount}">0</span>
+                            </button>
 
-                    <!-- いいねボタン -->
-                    <button class="likeBtn" th:data-post-id="${post.id}" th:data-liked="${post.liked}"
-                        th:onclick="|toggleLike(this)|">
-                        <span th:if="${post.liked}">⭐</span>
-                        <span th:unless="${post.liked}">★</span>
-                        <span id="like-count" th:text="${post.likeCount}">0</span>
-                    </button>
+                            <!-- コメント数（クリックでモーダル） -->
+                            <div class="commentBtn" th:data-post-id="${post.id}" th:data-count="${post.commentCount}"
+                                onclick="openCommentModal(this)">
+                                💬<span th:text="${post.commentCount}">0</span>
+                            </div>
 
-                    <!--　コメント数 -->
-                    <p class="comments" th:text="'💬 ' + ${post.commentCount}">0</p>
+                            <!-- 各投稿のコメントリストを JSON 埋め込み（同じカード内でOK） -->
+                            <script type="application/json" th:id="|comments-${post.id}|"
+                                th:inline="javascript">/*[[${post.commentList}]]*/</script>
 
-                    <!-- ルートボタン -->
-                    <button type="button" class="route-btn" th:if="${post.latitude != null and post.longitude != null}"
-                        th:onclick="|openGoogleMapsRoute(${post.latitude}, ${post.longitude})|">
-                        📍ルート
-                    </button>
+                            <!-- ルートボタン -->
+                            <button type="button" class="route-btn"
+                                th:if="${post.latitude != null and post.longitude != null}"
+                                th:onclick="|openGoogleMapsRoute(${post.latitude}, ${post.longitude})|">
+                                📍ルート
+                            </button>
+                        </div>
+                    </div>
 
                     <!-- 本文 -->
                     <p class="post-text" th:text="${post.text}"></p>
@@ -84,47 +104,48 @@
 
                     <!-- 詳細ページへ -->
                     <form action="/post" class="detail-link">
-                        <input type="hidden" name="id" th:value="${post.id}"></input>
+                        <input type="hidden" name="id" th:value="${post.id}">
                         <button type="submit">詳細はこちらへ</button>
                     </form>
-                    <!-- コメント数 -->
-                    <div class="comment-summary">
-                        💬 コメント <span th:text="${post.commentList.size()}">0</span>件
-                    </div>
-
-                    <!-- コメント投稿フォーム -->
-                    <form th:action="@{/comment/add}" th:object="${commentForm}" method="post" class="comment-form">
-                        <input type="hidden" th:field="*{postId}">
-                        <input type="text" th:field="*{text}" placeholder="コメントを入力">
-                        <button type="submit">投稿</button>
-                    </form>
-
-                    <!-- コメント一覧 -->
-                    <div class="comment-section">
-                        <div class="comment" th:each="comment : ${post.commentList}">
-                            <div class="comment-header">
-                                <img th:src="@{${comment.profileImage}}" alt="プロフィール画像" class="comment-icon">
-                                <span class="comment-username" th:text="${comment.userName}"></span>
-                            </div>
-
-                            <div class="comment-body" th:text="${comment.text}"></div>
-
-                            <!-- 自分のコメントのみ編集・削除表示 -->
-                            <div th:if="${comment.userId == post.loginUserId}" class="comment-actions">
-                                <button type="button" th:data-id="${comment.id}"
-                                    onclick="openEditModal(this)">編集</button>
-                                <form th:action="@{/comment/delete}" method="post">
-                                    <input type="hidden" name="commentId" th:value="${comment.id}"></input>
-                                    <button type="submit">削除</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
             </div>
+
         </section>
     </main>
+
+    <!-- コメント一覧モーダル -->
+    <div id="commentModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="comment-count">💬 コメント <span id="cm-count">0</span>件</span>
+                <button type="button" class="modal-close" onclick="closeCommentModal()">✕</button>
+            </div>
+
+            <div id="cm-list" class="comment-list"></div>
+
+            <form th:action="@{/comment/add}" method="post" class="comment-form">
+                <input type="hidden" name="postId" id="cm-postId">
+                <input type="text" name="text" placeholder="コメントを入力" required>
+                <button type="submit">送信</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- コメント編集モーダル -->
+    <div id="editModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>編集</span>
+                <button type="button" class="modal-close" onclick="closeEditModal()">✕</button>
+            </div>
+            <form method="post" action="/comment/edit">
+                <input type="hidden" name="id" id="editCommentId">
+                <textarea name="text" id="editCommentText"></textarea>
+                <button type="submit" class="edit-submit">更新</button>
+            </form>
+        </div>
+    </div>
 
     <!-- フッター -->
     <div th:replace="~{fragments/footer :: footer}"></div>

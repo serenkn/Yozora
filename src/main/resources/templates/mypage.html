@@ -16,7 +16,6 @@
             }
         });
     </script>
-
 </head>
 
 <body>
@@ -52,6 +51,8 @@
             </div>
         </header>
 
+        <input type="hidden" id="loginUserId" th:value="${user.id}">
+
         <!-- 投稿一覧 -->
         <section class="post-list">
             <!-- 投稿がない場合の表示 -->
@@ -62,6 +63,15 @@
             <!-- 投稿がある場合の表示 -->
             <div class="posts-container" th:if="${postList != null and !postList.isEmpty()}">
                 <div th:each="post : ${postList}" class="post-item">
+
+                    <!-- 投稿者情報 -->
+                    <div class="user-info">
+                        <img th:src="@{${user.profileImage}}" class="user-icon" alt="アイコン">
+                        <span th:text="${user.userName}" class="user-name"></span>
+                    </div>
+
+                    <!-- タイトル -->
+                    <p class="post-title" th:text="${post.title}"></p>
 
                     <!-- 画像複数枚表示 -->
                     <div class="swiper post-carousel" th:if="${post.imageUrls != null}">
@@ -75,28 +85,37 @@
                         <div class="swiper-button-next"></div>
                     </div>
 
-                    <!-- 投稿日時 -->
-                    <p class="post-date" th:text="${#temporals.format(post.createdAt, 'yyyy/MM/dd HH:mm')}"></p>
+                    <div class="post-meta">
+                        <!-- 投稿日時 -->
+                        <p class="post-time date-time" th:text="${post.createdAt}"></p>
 
-                    <!-- いいねボタン -->
-                    <button class="likeBtn" th:data-post-id="${post.id}" th:data-liked="${post.liked}"
-                        th:onclick="|toggleLike(this)|">
-                        <span th:if="${post.liked}">⭐</span>
-                        <span th:unless="${post.liked}">★</span>
-                        <span id="like-count" th:text="${post.likeCount}">0</span>
-                    </button>
+                        <div class="post-actions">
+                            <!-- いいねボタン -->
+                            <button class="likeBtn" th:data-post-id="${post.id}" th:data-liked="${post.liked}"
+                                th:onclick="|toggleLike(this)|">
+                                <span th:if="${post.liked}">⭐</span>
+                                <span th:unless="${post.liked}">★</span>
+                                <span id="like-count" th:text="${post.likeCount}">0</span>
+                            </button>
 
-                    <!--　コメント数 -->
-                    <p class="comments" th:text="'💬 ' + ${post.commentCount}">0</p>
+                            <!-- コメント数（クリックでモーダル） -->
+                            <div class="commentBtn" th:data-post-id="${post.id}" th:data-count="${post.commentCount}"
+                                onclick="openCommentModal(this)">
+                                💬<span th:text="${post.commentCount}">0</span>
+                            </div>
 
-                    <!-- ルートボタン -->
-                    <button type="button" class="route-btn" th:if="${post.latitude != null and post.longitude != null}"
-                        th:onclick="|openGoogleMapsRoute(${post.latitude}, ${post.longitude})|">
-                        📍ルート
-                    </button>
+                            <!-- 各投稿のコメントリストを JSON 埋め込み（同じカード内でOK） -->
+                            <script type="application/json" th:id="|comments-${post.id}|"
+                                th:inline="javascript">/*[[${post.commentList}]]*/</script>
 
-                    <!-- タイトル -->
-                    <p class="post-title" th:text="${post.title}"></p>
+                            <!-- ルートボタン -->
+                            <button type="button" class="route-btn"
+                                th:if="${post.latitude != null and post.longitude != null}"
+                                th:onclick="|openGoogleMapsRoute(${post.latitude}, ${post.longitude})|">
+                                📍ルート
+                            </button>
+                        </div>
+                    </div>
 
                     <!-- 本文 -->
                     <p class="post-text" th:text="${post.text}"></p>
@@ -111,8 +130,8 @@
                     </form>
 
                     <!-- 編集・削除ボタン -->
-                    <div class="post-actions">
-                        <a th:href="@{/post/edit/{id}(id=${post.id})}" class="btn">編集</a>
+                    <div class="edit-delete">
+                        <a th:href="@{/post/edit/{id}(id=${post.id})}" class="edit-btn">編集</a>
                         <form th:action="@{/post/delete}" method="post" onsubmit="return confirm('本当に削除しますか？');">
                             <input type="hidden" name="id" th:value="${post.id}">
                             <input type="submit" value="削除" class="delete-btn">
@@ -123,6 +142,39 @@
             </div>
         </section>
     </main>
+
+    <!-- コメント一覧モーダル -->
+    <div id="commentModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="comment-count">💬 コメント <span id="cm-count">0</span>件</span>
+                <button type="button" class="modal-close" onclick="closeCommentModal()">✕</button>
+            </div>
+
+            <div id="cm-list" class="comment-list"></div>
+
+            <form th:action="@{/comment/add}" method="post" class="comment-form">
+                <input type="hidden" name="postId" id="cm-postId">
+                <input type="text" name="text" placeholder="コメントを入力" required>
+                <button type="submit">送信</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- コメント編集モーダル -->
+    <div id="editModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>編集</span>
+                <button type="button" class="modal-close" onclick="closeEditModal()">✕</button>
+            </div>
+            <form method="post" action="/comment/edit">
+                <input type="hidden" name="id" id="editCommentId">
+                <textarea name="text" id="editCommentText"></textarea>
+                <button type="submit" class="edit-submit">更新</button>
+            </form>
+        </div>
+    </div>
 
     <!-- フッター -->
     <div th:replace="~{fragments/footer :: footer}"></div>

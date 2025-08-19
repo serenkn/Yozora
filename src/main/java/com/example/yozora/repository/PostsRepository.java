@@ -73,7 +73,7 @@ public class PostsRepository {
         return entity;
     }
 
-    // ログインユーザー用 投稿、画像、ユーザー名、アイコン、いいね数、コメント数、イイネ済みかチェック 全取得し投稿に結合：投稿最新順
+    // ゲストユーザー用 投稿、画像、ユーザー名、アイコン、いいね数、コメント数、イイネ済みかチェック 全取得し投稿に結合：投稿最新順
     public List<PostAllEntity> findAllPostForGuest() {
 
         String sql = """
@@ -109,6 +109,150 @@ public class PostsRepository {
                 """;
 
         List<PostAllEntity> entity = jdbcTemplate.query(sql, new PostAllRowMapper());
+
+        return entity;
+    }
+
+    // 全ての投稿をいいね数順で取得
+    public List<PostAllEntity> findAllPostPopular(Integer userId) {
+
+        String sql = """
+                    SELECT
+                        p.id,
+                        p.user_id,
+                        p.title,
+                        p.address,
+                        p.latitude,
+                        p.longitude,
+                        p.created_at,
+                        pi.image_url,
+                        pi.image_order,
+                        u.user_name,
+                        u.profile_image,
+                        COALESCE(l.like_count, 0) AS like_count,
+                        COALESCE(c.comment_count, 0) AS comment_count,
+                        CASE
+                            WHEN ul.user_id IS NOT NULL THEN TRUE
+                            ELSE FALSE
+                        END AS liked
+                    FROM posts p
+                    LEFT JOIN post_images pi ON p.id = pi.post_id
+                    LEFT JOIN users u ON p.user_id = u.id
+                    LEFT JOIN (
+                        SELECT post_id, COUNT(*) AS like_count
+                        FROM likes
+                        GROUP BY post_id
+                    ) l ON p.id = l.post_id
+                    LEFT JOIN (
+                        SELECT post_id, COUNT(*) AS comment_count
+                        FROM comments
+                        GROUP BY post_id
+                    ) c ON p.id = c.post_id
+                    LEFT JOIN (
+                        SELECT post_id, user_id
+                        FROM likes
+                        WHERE user_id = ?
+                    ) ul ON p.id = ul.post_id
+                    ORDER BY l.like_count DESC
+                """;
+
+        List<PostAllEntity> entity = jdbcTemplate.query(sql, new PostAllRowMapper(), userId);
+
+        return entity;
+    }
+
+    // 全ての投稿をランダム順で取得
+    public List<PostAllEntity> findAllPostRandom(Integer userId) {
+
+        String sql = """
+                    SELECT
+                        p.id,
+                        p.user_id,
+                        p.title,
+                        p.address,
+                        p.latitude,
+                        p.longitude,
+                        p.created_at,
+                        pi.image_url,
+                        pi.image_order,
+                        u.user_name,
+                        u.profile_image,
+                        COALESCE(l.like_count, 0) AS like_count,
+                        COALESCE(c.comment_count, 0) AS comment_count,
+                        CASE
+                            WHEN ul.user_id IS NOT NULL THEN TRUE
+                            ELSE FALSE
+                        END AS liked
+                    FROM posts p
+                    LEFT JOIN post_images pi ON p.id = pi.post_id
+                    LEFT JOIN users u ON p.user_id = u.id
+                    LEFT JOIN (
+                        SELECT post_id, COUNT(*) AS like_count
+                        FROM likes
+                        GROUP BY post_id
+                    ) l ON p.id = l.post_id
+                    LEFT JOIN (
+                        SELECT post_id, COUNT(*) AS comment_count
+                        FROM comments
+                        GROUP BY post_id
+                    ) c ON p.id = c.post_id
+                    LEFT JOIN (
+                        SELECT post_id, user_id
+                        FROM likes
+                        WHERE user_id = ?
+                    ) ul ON p.id = ul.post_id
+                    ORDER BY RAND()
+                """;
+
+        List<PostAllEntity> entity = jdbcTemplate.query(sql, new PostAllRowMapper(), userId);
+
+        return entity;
+    }
+
+    // 全ての投稿を過去順で取得
+    public List<PostAllEntity> findAllPostOldest(Integer userId) {
+
+        String sql = """
+                    SELECT
+                        p.id,
+                        p.user_id,
+                        p.title,
+                        p.address,
+                        p.latitude,
+                        p.longitude,
+                        p.created_at,
+                        pi.image_url,
+                        pi.image_order,
+                        u.user_name,
+                        u.profile_image,
+                        COALESCE(l.like_count, 0) AS like_count,
+                        COALESCE(c.comment_count, 0) AS comment_count,
+                        CASE
+                            WHEN ul.user_id IS NOT NULL THEN TRUE
+                            ELSE FALSE
+                        END AS liked
+                    FROM posts p
+                    LEFT JOIN post_images pi ON p.id = pi.post_id
+                    LEFT JOIN users u ON p.user_id = u.id
+                    LEFT JOIN (
+                        SELECT post_id, COUNT(*) AS like_count
+                        FROM likes
+                        GROUP BY post_id
+                    ) l ON p.id = l.post_id
+                    LEFT JOIN (
+                        SELECT post_id, COUNT(*) AS comment_count
+                        FROM comments
+                        GROUP BY post_id
+                    ) c ON p.id = c.post_id
+                    LEFT JOIN (
+                        SELECT post_id, user_id
+                        FROM likes
+                        WHERE user_id = ?
+                    ) ul ON p.id = ul.post_id
+                    ORDER BY p.created_at ASC
+                """;
+
+        List<PostAllEntity> entity = jdbcTemplate.query(sql, new PostAllRowMapper(), userId);
 
         return entity;
     }

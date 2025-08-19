@@ -4,18 +4,17 @@
 <head>
     <meta charset="UTF-8" />
     <title>プロフィール編集</title>
-    <link th:href="@{/css/login.css}" rel="stylesheet">
-    <script src="/js/script.js" defer></script>
+    <link th:href="@{/css/user_edit.css}" rel="stylesheet">
+    <script th:src="@{/js/post.js}" defer></script>
 </head>
 
 <body>
-    <header>
-        <div class="form-header">
-            <h1>プロフィールを編集して星いな～</h1>
-        </div>
-    </header>
-
     <div id="wrapper">
+
+        <header>
+            <h1>プロフィールを編集して星いな～</h1>
+        </header>
+
         <main>
             <div id="form-area">
                 <form th:action="@{/userEdit}" th:object="${userEditForm}" method="post" enctype="multipart/form-data">
@@ -24,19 +23,20 @@
                         <img id="profilePreview" th:src="@{${userEditForm.profileImage}}" alt="プロフィール画像"
                             class="profile-image">
                     </label>
+
                     <input type="file" id="imageInput" th:field="*{image}" accept="image/*" style="display: none;">
                     <input type="hidden" th:field="*{profileImage}"></input>
 
                     <div class="form-center">
-                        <label for="userName" class="form-label">ユーザーネーム:</label>
-                        <input id="userName" th:field="*{userName}" placeholder="Yozora">
+                        <label for="userName" class="disp-block">ユーザーネーム</label>
+                        <input id="userName" size="30" th:field="*{userName}" placeholder="Yozora">
                     </div>
                     <div class="form-validate">
                         <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="errors"></span>
                     </div>
 
                     <div class="form-center">
-                        <label for="email" class="form-label">メールアドレス:</label>
+                        <label for="email" class="disp-block">メールアドレス</label>
                         <input id="email" size="30" th:field="*{email}" placeholder="star-4649@yozora.com">
                     </div>
                     <div class="form-validate">
@@ -62,16 +62,16 @@
                     </div>
                 </form>
 
-
             </div>
         </main>
 
         <footer>
+            <a th:href="@{/password_edit}">パスワード変更はこちら</a>
+
             <form th:action="@{/userDelete}" method="post" onsubmit="return confirm('本当にアカウントを削除しますか？');">
-                <button type="submit" class="link-button">退会</button>
+                <button type="submit" class="link-button">アカウント削除はこちら</button>
             </form>
 
-            <a th:href="@{/password_edit}">パスワード変更はこちら</a>
         </footer>
     </div>
 

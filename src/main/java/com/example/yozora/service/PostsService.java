@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,11 +47,17 @@ public class PostsService {
     // 全ての投稿を取得するメソッド:top画面、scenery画面（最新順）で使用（ログインユーザー用）
     public List<PostDetailForm> getAllPosts(Integer userId) {
 
+        // コメント以外の全投稿情報を取得し、post_idでマッピング
         List<PostAllEntity> entityList = postsRepository.findAllPost(userId);
-
         List<PostDetailForm> entity = convert(entityList);
 
-        return entity;
+        // 全コメントの情報を取得し、post_idでマッピング
+        List<CommentWithUserEntity> commentlist = commentsRepository.findCommentWithUser();
+
+        // 投稿グループ、コメントグループをpost_idをキーに結合
+        List<PostDetailForm> posts = mergeCommentsToPosts(entity, commentlist);
+
+        return posts;
     }
 
     // 全ての投稿を取得するメソッド:top画面で使用（ゲストユーザー用）
@@ -61,6 +68,54 @@ public class PostsService {
         List<PostDetailForm> entity = convert(entityList);
 
         return entity;
+    }
+
+    // 全ての投稿を取得するメソッド:scenery画面 人気順
+    public List<PostDetailForm> getAllPostsPopular(Integer userId) {
+
+        // コメント以外の全投稿情報を取得し、post_idでマッピング
+        List<PostAllEntity> entityList = postsRepository.findAllPostPopular(userId);
+        List<PostDetailForm> entity = convert(entityList);
+
+        // 全コメントの情報を取得し、post_idでマッピング
+        List<CommentWithUserEntity> commentlist = commentsRepository.findCommentWithUser();
+
+        // 投稿グループ、コメントグループをpost_idをキーに結合
+        List<PostDetailForm> posts = mergeCommentsToPosts(entity, commentlist);
+
+        return posts;
+    }
+
+    // 全ての投稿を取得するメソッド:scenery画面 ランダム順
+    public List<PostDetailForm> getAllPostsRandom(Integer userId) {
+
+        // コメント以外の全投稿情報を取得し、post_idでマッピング
+        List<PostAllEntity> entityList = postsRepository.findAllPostRandom(userId);
+        List<PostDetailForm> entity = convert(entityList);
+
+        // 全コメントの情報を取得し、post_idでマッピング
+        List<CommentWithUserEntity> commentlist = commentsRepository.findCommentWithUser();
+
+        // 投稿グループ、コメントグループをpost_idをキーに結合
+        List<PostDetailForm> posts = mergeCommentsToPosts(entity, commentlist);
+
+        return posts;
+    }
+
+    // 全ての投稿を取得するメソッド:scenery画面 過去順
+    public List<PostDetailForm> getAllPostsOldest(Integer userId) {
+
+        // コメント以外の全投稿情報を取得し、post_idでマッピング
+        List<PostAllEntity> entityList = postsRepository.findAllPostOldest(userId);
+        List<PostDetailForm> entity = convert(entityList);
+
+        // 全コメントの情報を取得し、post_idでマッピング
+        List<CommentWithUserEntity> commentlist = commentsRepository.findCommentWithUser();
+
+        // 投稿グループ、コメントグループをpost_idをキーに結合
+        List<PostDetailForm> posts = mergeCommentsToPosts(entity, commentlist);
+
+        return posts;
     }
 
     // 投稿IDごとにマッピングしてフォーム変換:top画面で使用
@@ -101,27 +156,52 @@ public class PostsService {
         return new ArrayList<>(postMap.values());
     }
 
+    // コメントをマッピングし、マッピング済みの投稿に結合
+    public List<PostDetailForm> mergeCommentsToPosts(List<PostDetailForm> posts,
+            List<CommentWithUserEntity> comments) {
+
+        Map<Integer, List<CommentWithUserEntity>> commentMap = new HashMap<>();
+
+        for (CommentWithUserEntity comment : comments) {
+            int postId = comment.getPostId();
+            if (!commentMap.containsKey(postId)) {
+                commentMap.put(postId, new ArrayList<>());
+            }
+            commentMap.get(postId).add(comment);
+        }
+
+        for (PostDetailForm post : posts) {
+            int postId = post.getId();
+            if (commentMap.containsKey(postId)) {
+                post.setCommentList(commentMap.get(postId));
+            }
+        }
+
+        return posts;
+    }
+
     // 自分の投稿を取得するメソッド:mypageで使用
     public List<PostDetailForm> getMyPosts(Integer userId) {
-
+        // 投稿＋画像取得
         List<PostWithImagesEntity> entityList = postsRepository.findMyPosts(userId);
-
         List<PostDetailForm> postList = convertToForm(entityList);
 
-        // // 各投稿に対して、イイネ、コメント追加
+        // いいね・コメント結合
         for (PostDetailForm form : postList) {
-
-            // いいね数を取得
             int likeCount = likesRepository.LikeCountByPostId(form.getId());
             form.setLikeCount(likeCount);
 
-            // // 投稿に対しいいね済みかチェック
+            // いいね済みか確認
             boolean exists = likesRepository.likedPost(form.getId(), userId);
             form.setLiked(exists);
 
             // コメント数を取得
             int commentCount = commentsRepository.commentCountByPostId(form.getId());
             form.setCommentCount(commentCount);
+
+            // コメント一覧を取得
+            List<CommentWithUserEntity> commentList = commentsRepository.findWithUserByPostId(form.getId());
+            form.setCommentList(commentList);
         }
 
         return postList;
