@@ -38,7 +38,7 @@ public class CommentsRepository {
     // コメント更新
     public int update(CommentsEntity entity) {
 
-        String sql = "UPDATE comments SET comment_text = ? WHERE id = ? AND users_id = ?";
+        String sql = "UPDATE comments SET text = ? WHERE id = ? AND user_id = ?";
 
         Object[] params = {
                 entity.getText(),

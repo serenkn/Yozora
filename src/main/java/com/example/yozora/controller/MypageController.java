@@ -47,8 +47,8 @@ public class MypageController {
         }
 
         // フォロー・フォロワー数（今は仮）
-        model.addAttribute("followCount", 0);
-        model.addAttribute("followerCount", 0);
+        // model.addAttribute("followCount", 0);
+        // model.addAttribute("followerCount", 0);
 
         return "mypage";
     }

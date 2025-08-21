@@ -48,6 +48,12 @@ function initMap() {
 }
 window.initMap = initMap;
 
+
+// 地図タイプ切替
+function setMapType(type) {
+    if (map) map.setMapTypeId(type);
+}
+
 // ==================== 投稿ピン描画 ====================
 function addPostMarkers(posts) {
     const infoWindow = new google.maps.InfoWindow();

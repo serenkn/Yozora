@@ -32,10 +32,9 @@ public class SceneryController {
         // ユーザー情報の取得
         String email = loginUser.getUsername();
         UsersEntity user = usersService.getUserByEmail(email);
-        Integer loginUserId = user.getId();
-        model.addAttribute("loginUserId", loginUserId);
+        model.addAttribute("user", user);
 
-        List<PostDetailForm> postList = postsService.getAllPosts(loginUserId);
+        List<PostDetailForm> postList = postsService.getAllPosts(user.getId());
 
         model.addAttribute("postList", postList);
 
@@ -49,9 +48,9 @@ public class SceneryController {
         // ユーザー情報の取得
         String email = loginUser.getUsername();
         UsersEntity user = usersService.getUserByEmail(email);
-        Integer loginUserId = user.getId();
+        model.addAttribute("user", user);
 
-        List<PostDetailForm> postList = postsService.getAllPostsPopular(loginUserId);
+        List<PostDetailForm> postList = postsService.getAllPostsPopular(user.getId());
 
         model.addAttribute("postList", postList);
 
@@ -65,9 +64,9 @@ public class SceneryController {
         // ユーザー情報の取得
         String email = loginUser.getUsername();
         UsersEntity user = usersService.getUserByEmail(email);
-        Integer loginUserId = user.getId();
+        model.addAttribute("user", user);
 
-        List<PostDetailForm> postList = postsService.getAllPostsRandom(loginUserId);
+        List<PostDetailForm> postList = postsService.getAllPostsRandom(user.getId());
 
         model.addAttribute("postList", postList);
 
@@ -81,9 +80,9 @@ public class SceneryController {
         // ユーザー情報の取得
         String email = loginUser.getUsername();
         UsersEntity user = usersService.getUserByEmail(email);
-        Integer loginUserId = user.getId();
+        model.addAttribute("user", user);
 
-        List<PostDetailForm> postList = postsService.getAllPostsOldest(loginUserId);
+        List<PostDetailForm> postList = postsService.getAllPostsOldest(user.getId());
 
         model.addAttribute("postList", postList);
 

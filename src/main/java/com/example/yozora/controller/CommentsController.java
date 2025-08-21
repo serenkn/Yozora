@@ -27,7 +27,7 @@ public class CommentsController {
 
     // コメント新規追加
     @PostMapping(value = "/comment/add")
-    public String addCommentByScenerey(
+    public String addComment(
             @Validated @ModelAttribute CommentForm form,
             BindingResult result,
             @AuthenticationPrincipal User loginUser,
@@ -64,30 +64,36 @@ public class CommentsController {
             @RequestParam(value = "ret", required = false) String ret,
             Model model) {
 
+        System.out.println("Editing comment with form: " + form);
+
         String target = (ret != null && ret.startsWith("/")) ? ret : "/scenery";
 
-        if (result.hasErrors()) {
+        // if (result.hasErrors()) {
 
-            model.addAttribute("editTargetId", form.getId());
+        // // model.addAttribute("error", form.getId());
 
-            return "redirect:" + target;
-        }
+        // return "redirect:" + target;
+        // }
 
         String email = loginUser.getUsername();
         UsersEntity user = usersService.getUserByEmail(email);
+        System.out.println("Editing comment for user: " + user);
 
         form.setUserId(user.getId());
 
         int row = commentsService.updateComment(form);
 
         if (row == 0) {
-            model.addAttribute("error", "コメントの編集できませんでした。");
+
+            model.addAttribute("editTargetId", form.getId());
+
+            return "redirect:" + target;
         }
 
         return "redirect:" + target;
     }
 
-    // コメント削除処理
+    // コメント削除
     @PostMapping("/comment/delete")
     public String deleteComment(
             @ModelAttribute CommentForm form,

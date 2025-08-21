@@ -32,15 +32,17 @@ public class TopController {
 
         List<PostDetailForm> postList = new ArrayList<>();
 
+        // ゲストかログイン済みかチェック
         if (loginUser != null) {
 
             // ユーザー情報の取得
             String email = loginUser.getUsername();
             UsersEntity user = usersService.getUserByEmail(email);
-            Integer loginUserId = user.getId();
+            model.addAttribute("user", user);
 
             // 全ての投稿を取得：ログインユーザー用
-            postList = postsService.getAllPosts(loginUserId);
+            postList = postsService.getAllPosts(user.getId());
+
         } else {
             // ゲストログイン用
             postList = postsService.getAllPostsForGuest();

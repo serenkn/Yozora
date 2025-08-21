@@ -30,7 +30,8 @@
             </div>
         </header>
 
-        <input type="hidden" id="loginUserId" th:value="${loginUserId}">
+        <!-- コメントモーダル用 -->
+        <input type="hidden" id="loginUserId" th:value="${user.id}">
 
         <!-- 投稿一覧 -->
         <section class="post-list">
@@ -133,18 +134,19 @@
     </div>
 
     <!-- コメント編集モーダル -->
-    <div id="editModal" class="modal" style="display:none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span>編集</span>
-                <button type="button" class="modal-close" onclick="closeEditModal()">✕</button>
+    <div id="editModal" class="modal">
+        <form th:action="@{/comment/edit}" th:object="${commentForm}" method="post">
+
+            <input type="hidden" name="id" id="editCommentId"></input>
+
+            <input type="text" name="text" id="editCommentText" class="edit-text">
+
+            <div class="modal-action">
+                <button type="button" class="btn-cancel" onclick="closeEditModal()">破棄</button>
+                <button type="submit" class="btn-save">保存</button>
             </div>
-            <form method="post" action="/comment/edit">
-                <input type="hidden" name="id" id="editCommentId">
-                <textarea name="text" id="editCommentText"></textarea>
-                <button type="submit" class="edit-submit">更新</button>
-            </form>
-        </div>
+
+        </form>
     </div>
 
     <!-- フッター -->

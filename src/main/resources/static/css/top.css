@@ -1,7 +1,6 @@
 /* ======== レイアウト ======== */
 :root {
     --footer-h: 50px;
-    /* フッターの高さ */
 }
 
 html,
@@ -18,17 +17,10 @@ body {
 
 main {
     position: relative;
-    /* flex: 1; */
     height: 100vh;
-    /* height: calc(100vh - 50px); */
     width: 100%;
 }
 
-/* main {
-    flex: 1;
-    /* overflow-y: auto;
-    padding-bottom: 50px; 
-}*/
 
 /* ======== Google Mapエリア ======== */
 #map {
@@ -95,6 +87,7 @@ main {
     margin-top: 8px;
     padding: 0;
     background-color: white;
+    color: black;
     border-radius: 6px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     max-height: 200px;

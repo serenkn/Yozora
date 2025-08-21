@@ -143,24 +143,59 @@ function toggleLike(button) {
         });
 }
 
-// ===== 編集モーダル =====
+// ==================== コメント編集モーダル（シンプル版） ====================
+// ==================== コメント編集モーダル（シンプル版） ====================
+
+// モーダルを開く
 window.openEditModal = function (button) {
-    const commentId = button.dataset.id;
-    const commentText = button.closest('.comment').querySelector('.comment-body').innerText;
+    const modal = document.getElementById("editModal");       // モーダル本体
+    const idInput = document.getElementById("editCommentId"); // hidden コメントID
+    const textInput = document.getElementById("editCommentText"); // textarea
+    const saveBtn = modal.querySelector('button[type="submit"]');
 
-    document.getElementById("editCommentId").value = commentId;
-    document.getElementById("editCommentText").value = commentText;
+    // 編集対象のコメント要素を取得
+    const row = button.closest(".comment");
+    if (!row || !modal) return;
 
-    // いまのURLを戻り先として付与（編集）
-    const ret = encodeURIComponent(location.pathname + location.search);
-    const editForm = document.querySelector('#editModal form');
-    if (editForm) editForm.action = '/comment/edit?ret=' + ret;
+    // コメントIDをセット
+    idInput.value = button.dataset.id;
 
-    document.getElementById("editModal").style.display = "block";
+    // コメント本文をセット
+    const body = row.querySelector(".comment-body");
+    const original = body ? body.innerText : "";
+    textInput.value = original;
+    textInput.dataset.original = original;
+
+    // === ★ ret hidden をセット ===
+    const form = modal.querySelector('form');
+    let retEl = form.querySelector('input[name="ret"]');
+    if (!retEl) {
+        retEl = document.createElement('input');
+        retEl.type = 'hidden';
+        retEl.name = 'ret';
+        form.prepend(retEl);
+    }
+    retEl.value = location.pathname + location.search;
+    // ==============================
+
+    // 入力チェック（未変更 or 空なら保存ボタンOFF）
+    function check() {
+        const cur = textInput.value.trim();
+        const changed = cur !== textInput.dataset.original.trim();
+        saveBtn.disabled = !changed || cur === "";
+    }
+    textInput.oninput = check;
+    check();
+
+    // モーダル表示
+    modal.style.display = "flex";
+    textInput.focus();
 };
 
+// モーダルを閉じる
 window.closeEditModal = function () {
-    document.getElementById("editModal").style.display = "none";
+    const modal = document.getElementById("editModal");
+    if (modal) modal.style.display = "none";
 };
 
 // ===== コメントモーダル =====
@@ -185,12 +220,18 @@ function openCommentModal(button) {
     // hidden の postId
     postIdEl.value = postId;
 
-    // いまのURLを戻り先として付与（追加・削除）
-    const ret = encodeURIComponent(location.pathname + location.search);
-
-    // 追加フォームの action を差し替え
+    // ★ 送信フォームの action に ret を JS で付与（hidden は使わない）
     const addForm = document.querySelector('#commentModal form');
-    if (addForm) addForm.action = '/comment/add?ret=' + ret;
+    if (addForm) {
+        const ret = encodeURIComponent(location.pathname + location.search);
+        addForm.action = '/comment/add?ret=' + ret;
+    }
+
+    // hidden の ret（元の方式に戻す）
+    const retEl = document.getElementById('cm-ret');
+    if (retEl) {
+        retEl.value = location.pathname + location.search;
+    }
 
     // ログインユーザーID（必ず存在する前提）
     const loginUserId = document.getElementById('loginUserId').value;
@@ -210,8 +251,9 @@ function openCommentModal(button) {
             ${isMine ? `
               <div class="comment-actions">
                 <button type="button" onclick="openEditModal(this)" data-id="${c.id}">編集</button>
-                <form method="post" action="/comment/delete?ret=${ret}" style="display:inline;">
+                <form method="post" action="/comment/delete" style="display:inline;" onsubmit="return confirm('コメントを削除しますか？');">
                   <input type="hidden" name="id" value="${c.id}">
+                  <input type="hidden" name="ret" value="${location.pathname + location.search}">
                   <button type="submit">削除</button>
                 </form>
               </div>
@@ -285,6 +327,22 @@ function restoreScrollPosition() {
         localStorage.removeItem("scrollPosition");
     }
 }
+
+//今いるページをチェック：フッター
+document.addEventListener("DOMContentLoaded", () => {
+    // 末尾のスラッシュを除去して正規化
+    const norm = p => (p || "/").replace(/\/+$/, "") || "/";
+
+    const path = norm(window.location.pathname);
+
+    document.querySelectorAll(".footer-nav a").forEach(a => {
+        const href = norm(a.getAttribute("href") || "");
+        // 完全一致 or 下位パス
+        if (path === href || path.startsWith(href + "/")) {
+            a.classList.add("active");
+        }
+    });
+});
 
 // ===== 初期化 =====
 function init() {

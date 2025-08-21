@@ -1,8 +1,13 @@
 <!-- フッター -->
 <footer>
     <nav class="footer-nav">
-        <a th:href="@{/top}">TOP</a>
-        <a th:href="@{/scenery}">景色一覧</a>
-        <a th:href="@{/mypage}">マイページ</a>
+        <a th:href="@{/top}" class="nav-item">🏠TOP</a>
+        <a th:href="@{/scenery}" class="nav-item">👑景色一覧</a>
+        <a th:href="@{/mypage}" class="nav-item">
+            <span class="avatar">
+                <img th:src="${user != null && user.profileImage != null} ? ${user.profileImage} : @{/images/default_icon.png}"
+                    alt="user">
+            </span>マイページ
+        </a>
     </nav>
 </footer>

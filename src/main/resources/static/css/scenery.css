@@ -5,16 +5,53 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Yu Gothic', sans-serif;
-    background-color: #0a0a0a;
-    color: #fff;
+    background: url("/images/star_background.jpg") no-repeat center center fixed;
     display: flex;
     flex-direction: column;
+    z-index: 0;
+
 }
 
 main {
     flex: 1;
     overflow-y: auto;
     padding-bottom: 80px;
+}
+
+/* 並び替えタブ */
+.sort-tabs {
+    display: flex;
+    justify-content: space-around;
+    max-width: 500px;
+    margin: 10px auto;
+    background: #222;
+    padding: 6px 0;
+    border-radius: 8px;
+}
+
+/* 各タブボタン */
+.sort-tab {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    /* フッターより小さめ */
+    transition: background-color 0.3s, box-shadow 0.3s;
+    white-space: nowrap;
+}
+
+/* hover */
+.sort-tab:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* アクティブ（選択中タブ） */
+.sort-tab.active {
+    background: #fff;
+    color: #000;
+    box-shadow: 0 0 6px #fff;
 }
 
 /* 投稿セクションを中央寄せ */
@@ -31,12 +68,11 @@ main {
 
 /* 各投稿カード */
 .post-item {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 12px;
     padding: 14px 16px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(4px);
 }
 
 /* ユーザーアイコン　名前 */
@@ -57,7 +93,7 @@ main {
 .user-name {
     font-size: 16px;
     font-weight: 600;
-    color: white;
+    color: #000;
 }
 
 /* タイトル/本文などテキスト */
@@ -65,14 +101,14 @@ main {
     font-weight: 700;
     margin: 8px 0 6px;
     line-height: 1.35;
+    color: #000;
 }
 
 .post-text,
 .post-address {
     margin: 4px 0;
-    color: #e6e6e6;
+    color: #222;
 }
-
 
 /* 画像カルーセル（Swiper）*/
 .post-carousel {
@@ -98,7 +134,7 @@ main {
     object-position: center;
 }
 
-/* アクション行（いいね/コメント/ルート） */
+/* いいね コメント ルート */
 .post-meta {
     display: flex;
     justify-content: space-between;
@@ -117,7 +153,7 @@ main {
 /* 投稿日時 */
 .post-time {
     font-size: 12px;
-    color: #aeb3bd;
+    color: #444;
     margin-top: 2px;
 }
 
@@ -131,7 +167,7 @@ main {
     margin: 0;
     border: none;
     background: none;
-    color: #fff;
+    color: #000;
     cursor: pointer;
     font-size: 14px;
 }
@@ -139,7 +175,7 @@ main {
 .likeBtn:hover,
 .commentBtn:hover,
 .route-btn:hover {
-    background: rgba(255, 255, 255, 0.14);
+    background: #f0f0f0;
 }
 
 .likeBtn:active,
@@ -148,7 +184,7 @@ main {
     transform: translateY(1px);
 }
 
-/* 詳細リンクのボタン風 */
+/* 詳細リンク */
 .detail-link {
     margin-top: 10px;
 }
@@ -157,18 +193,18 @@ main {
     width: 100%;
     padding: 10px 12px;
     border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    background: rgba(255, 255, 255, 0.06);
+    border: none;
+    background: #444;
     color: #fff;
     cursor: pointer;
     transition: background-color .15s ease;
 }
 
 .detail-link button:hover {
-    background: rgba(255, 255, 255, 0.14);
+    background: #222;
 }
 
-/* 編集/削除ボタン（自分の投稿のみの行） */
+/* 編集/削除ボタン（自分の投稿のみ） */
 .post-actions {
     display: flex;
     gap: 8px;
@@ -179,8 +215,8 @@ main {
 .post-actions .delete-btn {
     padding: 8px 12px;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    background: rgba(255, 255, 255, 0.06);
+    border: none;
+    background: #444;
     color: #fff;
     text-decoration: none;
     cursor: pointer;
@@ -189,7 +225,7 @@ main {
 
 .post-actions .btn:hover,
 .post-actions .delete-btn:hover {
-    background: rgba(255, 255, 255, 0.14);
+    background: #222;
 }
 
 /* ================== コメントモーダル ================== */
@@ -197,7 +233,7 @@ main {
     display: none;
     position: fixed;
     inset: 0;
-    z-index: 9999;
+    z-index: 10000;
     background: rgba(0, 0, 0, 0.65);
     justify-content: flex-end;
 }
@@ -207,13 +243,13 @@ main {
     position: relative;
     width: min(400px, 92vw);
     height: 100%;
-    background: #111;
-    border-left: 1px solid rgba(255, 255, 255, 0.18);
+    background: #fff;
+    border-left: 1px solid rgba(0, 0, 0, 0.18);
     display: flex;
     flex-direction: column;
 }
 
-/* 上部バー：中央に件数、右に✕ */
+/* 上部固定バー */
 .modal-header {
     position: sticky;
     top: 0;
@@ -221,8 +257,8 @@ main {
     justify-content: center;
     align-items: center;
     padding: 12px;
-    background: #111;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    background: #fff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.18);
 }
 
 .modal-close {
@@ -232,7 +268,7 @@ main {
     transform: translateY(-50%);
     background: none;
     border: none;
-    color: #fff;
+    color: #222;
     font-size: 18px;
     cursor: pointer;
     padding: 6px 8px;
@@ -240,7 +276,7 @@ main {
 }
 
 .comment-count {
-    color: #fff;
+    color: #222;
     font-size: 14px;
 }
 
@@ -253,8 +289,8 @@ main {
 
 .comment {
     padding: 10px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
-    color: #fff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+    color: #222;
 }
 
 .comment-header {
@@ -274,18 +310,19 @@ main {
 .comment-username {
     font-weight: 700;
     font-size: 14px;
+    color: #222;
 }
 
 .comment-date {
     margin-left: auto;
     font-size: 12px;
-    color: #aeb3bd;
+    color: #555;
 }
 
 .comment-body {
     font-size: 14px;
     line-height: 1.45;
-    color: #ddd;
+    color: #333;
 }
 
 /* フッター（送信フォーム） */
@@ -293,117 +330,143 @@ main {
     display: flex;
     gap: 8px;
     padding: 10px 12px;
-    background: #111;
-    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    background: #fff;
+    border-top: 1px solid rgba(0, 0, 0, 0.18);
 }
 
 .comment-form input[type="text"] {
     flex: 1;
     padding: 8px 10px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    background: #0f0f0f;
-    color: #fff;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    color: #222;
 }
 
 .comment-form button {
     padding: 8px 14px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    background: rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    border: none;
+    background: #444;
     color: #fff;
     cursor: pointer;
 }
 
-/* 背景スクロール停止（使ってなければ無視される） */
+.comment-form button:hover {
+    background: #222;
+}
+
+/* ================== コメントアクション（編集・削除） ================== */
+.comment-actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.comment-actions button,
+.comment-actions form button {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.22);
+    background: rgba(0, 0, 0, 0.04);
+    color: #222;
+    cursor: pointer;
+}
+
+/* 編集ボタン hover */
+.comment-actions button:hover {
+    background: rgba(0, 0, 0, 0.10);
+}
+
+/* 削除ボタン */
+.comment-actions form button {
+    border-color: rgba(255, 80, 80, 0.4);
+    background: rgba(255, 80, 80, 0.1);
+    color: #b00020;
+}
+
+.comment-actions form button:hover {
+    background: rgba(255, 80, 80, 0.2);
+}
+
+/* 背景スクロール停止 */
 body.modal-open {
     overflow: hidden;
 }
 
-/* === 編集モーダル ===== */
+/* ===== 編集モーダル（詳細と同じ見た目を共通化）===== */
 #editModal {
+    display: none;
     position: fixed;
     inset: 0;
-    display: none;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
-}
-
-/* === 編集モーダル本体 === */
-#editModal .modal-content {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 300px;
-    height: auto;
-    background: #fff;
-    border-radius: 6px;
-    padding: 8px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-}
-
-/* === ヘッダー === */
-#editModal .modal-header {
-    display: flex;
-    justify-content: center;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 10000;
     align-items: center;
-    padding: 4px 6px;
-    font-size: 14px;
-    font-weight: bold;
-    position: relative;
-    background: #333;
-    color: #fff;
-    border-bottom: none;
-    border-radius: 4px 4px 0 0;
+    justify-content: center;
+    padding: 16px;
+    pointer-events: none;
 }
 
-#editModal .modal-ti tle {
-    flex: 1;
-    text-align: center;
-}
-
-/* ×ボタン */
-#editModal .modal-close {
-    background: transparent;
-    border: 0;
-    font-size: 16px;
-    cursor: pointer;
-    color: #fff;
-}
-
-/* === フォーム === */
 #editModal form {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding-top: 6px;
+    width: min(640px, 92vw);
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 12px;
+    padding: 14px;
+    display: grid;
+    gap: 10px;
+    color: #222;
+    pointer-events: auto;
 }
 
-/* === テキストエリア === */
-#editModal textarea {
+/* 入力欄 */
+#editModal .edit-text {
     width: 100%;
-    min-height: 72px;
-    resize: none;
-    padding: 4px 6px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.22);
+    background: #fff;
+    color: #222;
+    padding: 0 12px;
     box-sizing: border-box;
 }
 
-/* === 更新ボタン === */
-#editModal .edit-submit {
-    align-self: flex-end;
-    padding: 4px 10px;
-    font-size: 13px;
-    border: none;
-    background: #007bff;
-    color: #fff;
-    border-radius: 4px;
-    cursor: pointer;
+/* ボタン行 */
+#editModal .modal-action {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
 
-#editModal .edit-submit:hover {
-    background: #0056b3;
+/* 破棄 / 保存ボタン */
+#editModal .btn-cancel {
+    background: #eee;
+    color: #222;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 8px 16px;
+}
+
+#editModal .btn-save {
+    background: #444;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+}
+
+#editModal .btn-save:hover {
+    background: #222;
+}
+
+/* ================== スマホ微調整 ================== */
+@media (max-width: 480px) {
+    .post-actions {
+        gap: 12px;
+    }
+
+    .comment-date {
+        font-size: 11px;
+    }
 }

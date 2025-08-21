@@ -41,8 +41,8 @@
                     <p class="user-name" th:text="${user.userName}">ユーザー名</p>
                     <div class="profile-stats">
                         <div><strong th:text="${postList != null ? postList.size() : 0}">0</strong> 投稿</div>
-                        <div><strong th:text="${followerCount}">0</strong> フォロワー</div>
-                        <div><strong th:text="${followCount}">0</strong> フォロー中</div>
+                        <!-- <div><strong th:text="${followerCount}">0</strong> フォロワー</div>
+                        <div><strong th:text="${followCount}">0</strong> フォロー中</div> -->
                     </div>
                     <div class="profile-actions">
                         <a th:href="@{/userEdit}" class="edit-btn">プロフィールを編集</a>
@@ -51,6 +51,7 @@
             </div>
         </header>
 
+        <!-- コメントモーダル用 -->
         <input type="hidden" id="loginUserId" th:value="${user.id}">
 
         <!-- 投稿一覧 -->
@@ -162,18 +163,19 @@
     </div>
 
     <!-- コメント編集モーダル -->
-    <div id="editModal" class="modal" style="display:none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span>編集</span>
-                <button type="button" class="modal-close" onclick="closeEditModal()">✕</button>
+    <div id="editModal" class="modal">
+        <form th:action="@{/comment/edit}" th:object="${commentForm}" method="post">
+
+            <input type="hidden" name="id" id="editCommentId"></input>
+
+            <input type="text" name="text" id="editCommentText" class="edit-text">
+
+            <div class="modal-action">
+                <button type="button" class="btn-cancel" onclick="closeEditModal()">破棄</button>
+                <button type="submit" class="btn-save">保存</button>
             </div>
-            <form method="post" action="/comment/edit">
-                <input type="hidden" name="id" id="editCommentId">
-                <textarea name="text" id="editCommentText"></textarea>
-                <button type="submit" class="edit-submit">更新</button>
-            </form>
-        </div>
+
+        </form>
     </div>
 
     <!-- フッター -->
