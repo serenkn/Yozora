@@ -183,12 +183,15 @@ public class PostsService {
 
     // 自分の投稿を取得するメソッド:mypageで使用
     public List<PostDetailForm> getMyPosts(Integer userId) {
+
         // 投稿＋画像取得
         List<PostWithImagesEntity> entityList = postsRepository.findMyPosts(userId);
         List<PostDetailForm> postList = convertToForm(entityList);
 
         // いいね・コメント結合
         for (PostDetailForm form : postList) {
+
+            // いいね数を取得
             int likeCount = likesRepository.LikeCountByPostId(form.getId());
             form.setLikeCount(likeCount);
 

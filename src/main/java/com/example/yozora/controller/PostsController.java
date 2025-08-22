@@ -89,6 +89,7 @@ public class PostsController {
         // ページタイプ最初に保持
         String pageType = postForm.getPageType();
         model.addAttribute("pageType", pageType);
+        model.addAttribute("postCreateForm", postForm);
 
         if (result.hasErrors()) {
             return "post_create";
@@ -100,20 +101,23 @@ public class PostsController {
 
         int rows;
 
+        // 新規投稿か編集かの判定
         if (postForm.getId() == null) {
+
             // 新規投稿
             rows = postsService.createPost(postForm, user.getId());
-
+            // 失敗時
             if (rows == 0) {
                 model.addAttribute("error", "投稿に失敗しました");
                 model.addAttribute("postCreateForm", postForm);
             }
-
             return "redirect:/top";
+
         } else {
+
             // 投稿編集
             rows = postsService.updatePost(postForm, user.getId());
-
+            // 失敗時
             if (rows == 0) {
                 model.addAttribute("error", "投稿に失敗しました");
                 model.addAttribute("postCreateForm", postForm);
@@ -121,10 +125,6 @@ public class PostsController {
 
             return "redirect:/mypage";
         }
-
-        // return "post_create";
-        // }
-        // return "redirect:/top";
     }
 
     // 投稿詳細画面の表示
@@ -166,5 +166,20 @@ public class PostsController {
         model.addAttribute("isMyPost", isMyPost);
 
         return "post";
+    }
+
+    // 投稿削除
+    @PostMapping(value = "/post/delete")
+    public String deletePost(@RequestParam("id") Integer id,
+            Model model) {
+
+        // 削除処理
+        int rows = postsService.deletePost(id);
+        if (rows == 0) {
+            model.addAttribute("error", "削除に失敗しました");
+            return "mypage";
+        }
+
+        return "redirect:/mypage";
     }
 }

@@ -44,8 +44,8 @@
 
                     <!-- 画像アップロード（編集のみ） -->
                     <div class="form-center">
-                        <label for="imageInput" class="file-label">画像を選択</label>
-                        <input id="imageInput" type="file" name="images" accept="image/*" multiple>
+                        <label for="imageFiles" class="file-label">画像を選択</label>
+                        <input id="imageFiles" type="file" th:field="*{imageFiles}" accept="image/*" multiple>
                     </div>
 
                     <!-- タイトル -->
@@ -71,7 +71,8 @@
                         <p class="post-address" th:text="*{address}"></p>
                     </div>
 
-                    <!-- 緯度経度（hidden） -->
+                    <!-- 住所、緯度、経度（hidden） -->
+                    <input type="hidden" th:field="*{address}">
                     <input type="hidden" th:field="*{latitude}">
                     <input type="hidden" th:field="*{longitude}">
 
@@ -92,6 +93,15 @@
 
             </div>
         </main>
+
+        <!-- ページタイプが edit のときだけ削除ボタン表示 -->
+        <form th:if="${postCreateForm.id != null}" th:action="@{/post/delete}" method="post"
+            onsubmit="return confirm('本当に削除しますか？');" class="delete-form">
+
+            <input type="hidden" name="id" th:value="${postCreateForm.id}">
+            <input type="submit" value="投稿の削除" class="post-delete">
+
+        </form>
     </div>
 </body>
 

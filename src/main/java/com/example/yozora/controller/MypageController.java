@@ -9,10 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -51,31 +48,5 @@ public class MypageController {
         // model.addAttribute("followerCount", 0);
 
         return "mypage";
-    }
-
-    // 自分の投稿削除
-    @PostMapping(value = "/post/delete")
-    public String deletePost(@ModelAttribute PostDetailForm form,
-            BindingResult result,
-            Model model,
-            @AuthenticationPrincipal User loginUser) {
-
-        // バリデーションチェック
-        if (result.hasErrors()) {
-            model.addAttribute("error", "投稿IDの取得に失敗しました");
-            return "mypage";
-        }
-
-        // ログインユーザー情報
-        UsersEntity user = usersService.getUserByEmail(loginUser.getUsername());
-
-        // 削除処理
-        int rows = postsService.deletePost(user.getId());
-        if (rows == 0) {
-            model.addAttribute("error", "削除に失敗しました");
-            return "mypage";
-        }
-
-        return "redirect:/mypage";
     }
 }

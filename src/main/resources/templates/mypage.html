@@ -67,8 +67,8 @@
 
                     <!-- 投稿者情報 -->
                     <div class="user-info">
-                        <img th:src="@{${user.profileImage}}" class="user-icon" alt="アイコン">
-                        <span th:text="${user.userName}" class="user-name"></span>
+                        <img th:src="@{${post.profileImage}}" class="user-icon" alt="アイコン">
+                        <span th:text="${post.userName}" class="user-name"></span>
                     </div>
 
                     <!-- タイトル -->
@@ -126,7 +126,7 @@
 
                     <!-- 詳細ページへ -->
                     <form action="/post" class="detail-link">
-                        <input type="hidden" name="id" th:value="${post.id}"></input>
+                        <input type="hidden" name="id" th:value="${post.id}">
                         <button type="submit">詳細はこちらへ</button>
                     </form>
 
@@ -138,6 +138,8 @@
                             <input type="submit" value="削除" class="delete-btn">
                         </form>
                     </div>
+
+                    <p th:if="${error}" th:text="${error}" class="errors"></p>
 
                 </div>
             </div>
@@ -166,7 +168,7 @@
     <div id="editModal" class="modal">
         <form th:action="@{/comment/edit}" th:object="${commentForm}" method="post">
 
-            <input type="hidden" name="id" id="editCommentId"></input>
+            <input type="hidden" name="id" id="editCommentId">
 
             <input type="text" name="text" id="editCommentText" class="edit-text">
 

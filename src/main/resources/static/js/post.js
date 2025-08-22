@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function initImageUploadWithPreview() {
     initSwiper();
 
-    const input = document.getElementById('imageInput');
+    const input = document.getElementById('imageFiles');
     const wrapper = document.querySelector('.swiper-wrapper');
     const form = document.querySelector('form');
 
