@@ -91,7 +91,6 @@ public class PostsController {
         model.addAttribute("pageType", pageType);
 
         if (result.hasErrors()) {
-            model.addAttribute("postCreateForm", postForm);
             return "post_create";
         }
 
@@ -104,18 +103,28 @@ public class PostsController {
         if (postForm.getId() == null) {
             // 新規投稿
             rows = postsService.createPost(postForm, user.getId());
+
+            if (rows == 0) {
+                model.addAttribute("error", "投稿に失敗しました");
+                model.addAttribute("postCreateForm", postForm);
+            }
+
+            return "redirect:/top";
         } else {
             // 投稿編集
             rows = postsService.updatePost(postForm, user.getId());
+
+            if (rows == 0) {
+                model.addAttribute("error", "投稿に失敗しました");
+                model.addAttribute("postCreateForm", postForm);
+            }
+
+            return "redirect:/mypage";
         }
 
-        if (rows == 0) {
-            model.addAttribute("error", "投稿に失敗しました");
-            model.addAttribute("postCreateForm", postForm);
-
-            return "post_create";
-        }
-        return "redirect:/top";
+        // return "post_create";
+        // }
+        // return "redirect:/top";
     }
 
     // 投稿詳細画面の表示

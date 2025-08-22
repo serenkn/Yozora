@@ -43,58 +43,98 @@ function initImageUploadWithPreview() {
 
     const input = document.getElementById('imageInput');
     const wrapper = document.querySelector('.swiper-wrapper');
-    if (!input || !wrapper) return;
+    const form = document.querySelector('form');
 
+    if (!input || !wrapper || !form) return;
+
+    // 1) 初期の既存URLをキャッシュ（後で選び直し時に復元するため）
+    let existingUrls = Array.from(form.querySelectorAll('input[name="imageUrls"]'))
+        .map(el => el.value);
+
+    // 既存URLからスライドを再描画（選び直し用）
+    function renderExisting() {
+        wrapper.innerHTML = '';
+        existingUrls.forEach(url => {
+            const slide = document.createElement('div');
+            slide.className = 'swiper-slide';
+            slide.innerHTML = `
+                <div class="preview-box">
+                    <img src="${url}" alt="投稿画像" class="carousel-image">
+                    ${showDelete ? `<button type="button" class="delete-btn">×</button>` : ''}
+                    <input type="hidden" name="imageUrls" value="${url}">
+                </div>
+            `;
+            wrapper.appendChild(slide);
+        });
+        swiper.update();
+        swiper.slideTo(0);
+    }
+
+    // 2) ファイル選択 → 「全入れ替えモード」で新規のみ表示（既存は表示から外れる）
     input.addEventListener('change', () => {
         wrapper.innerHTML = '';
-
-        Array.from(input.files).forEach((file, index) => {
+        const files = Array.from(input.files);
+        files.forEach(file => {
             const reader = new FileReader();
             reader.onload = function (e) {
                 const slide = document.createElement('div');
                 slide.className = 'swiper-slide';
-
+                // data-new で「新規スライド」印を付与（hiddenは作らない）
+                slide.setAttribute('data-new', 'true');
                 slide.innerHTML = `
                     <div class="preview-box">
                         <img src="${e.target.result}" alt="preview">
-                        ${showDelete ? `<button type="button" class="delete-btn" data-index="${index}">×</button>` : ''}
+                        ${showDelete ? `<button type="button" class="delete-btn">×</button>` : ''}
                     </div>
                 `;
-
                 wrapper.appendChild(slide);
                 swiper.update();
             };
             reader.readAsDataURL(file);
         });
+        if (files.length) swiper.slideTo(0);
     });
 
+    // 3) バツボタン
     if (showDelete) {
         document.addEventListener('click', function (e) {
-            if (e.target.classList.contains('delete-btn')) {
-                e.target.closest('.swiper-slide').remove();
+            if (!e.target.classList.contains('delete-btn')) return;
+
+            const slide = e.target.closest('.swiper-slide');
+            if (!slide) return;
+
+            // 3-1) 既存スライド：hiddenを持っている → その1枚だけ削除
+            const hidden = slide.querySelector('input[name="imageUrls"]');
+            if (hidden) {
+                // existingUrls からも削除して整合
+                const url = hidden.value;
+                existingUrls = existingUrls.filter(u => u !== url);
+
+                slide.remove();
                 swiper.update();
+                return;
+            }
+
+            // 3-2) 新規スライド：個別削除は不可 → いったん全部クリアして選び直し
+            if (slide.hasAttribute('data-new')) {
+                if (confirm('新規追加は全入れ替えです。この選択をクリアして選び直しますか？')) {
+                    // 入力とプレビューをリセット
+                    input.value = '';
+                    renderExisting(); // 既存を復元
+                }
             }
         });
     }
 
-    document.querySelector("form").addEventListener("submit", function (e) {
-        const imageFiles = document.getElementById("imageInput").files;
-        const existingImageInputs = document.querySelectorAll("input[name='imageUrls']");
-        if (imageFiles.length === 0 && existingImageInputs.length === 0) {
+    // 4) 送信前チェック（新規 or 既存のどちらかが1枚以上）
+    form.addEventListener('submit', function (e) {
+        const hasFiles = input.files && input.files.length > 0;
+        const hasExisting = form.querySelectorAll('input[name="imageUrls"]').length > 0;
+        if (!hasFiles && !hasExisting) {
             e.preventDefault();
-            alert("画像を1枚以上選択してください");
+            alert('画像を1枚以上選択してください');
         }
     });
-
-    const form = document.querySelector('form[method="post"]');
-    if (form) {
-        form.addEventListener('submit', function (e) {
-            if (input.files.length === 0) {
-                alert('画像を1枚以上選択してください');
-                e.preventDefault();
-            }
-        });
-    }
 }
 
 // ===== 投稿詳細：Swiper 初期化 =====
@@ -143,14 +183,13 @@ function toggleLike(button) {
         });
 }
 
-// ==================== コメント編集モーダル（シンプル版） ====================
-// ==================== コメント編集モーダル（シンプル版） ====================
+// ==================== コメント編集モーダル ====================
 
 // モーダルを開く
 window.openEditModal = function (button) {
     const modal = document.getElementById("editModal");       // モーダル本体
     const idInput = document.getElementById("editCommentId"); // hidden コメントID
-    const textInput = document.getElementById("editCommentText"); // textarea
+    const textInput = document.getElementById("editCommentText"); // text
     const saveBtn = modal.querySelector('button[type="submit"]');
 
     // 編集対象のコメント要素を取得
@@ -166,7 +205,7 @@ window.openEditModal = function (button) {
     textInput.value = original;
     textInput.dataset.original = original;
 
-    // === ★ ret hidden をセット ===
+    // ===  ret hidden をセット ===
     const form = modal.querySelector('form');
     let retEl = form.querySelector('input[name="ret"]');
     if (!retEl) {
@@ -176,7 +215,6 @@ window.openEditModal = function (button) {
         form.prepend(retEl);
     }
     retEl.value = location.pathname + location.search;
-    // ==============================
 
     // 入力チェック（未変更 or 空なら保存ボタンOFF）
     function check() {
@@ -220,20 +258,20 @@ function openCommentModal(button) {
     // hidden の postId
     postIdEl.value = postId;
 
-    // ★ 送信フォームの action に ret を JS で付与（hidden は使わない）
+    //  送信フォームの action に ret を JS で付与（hidden は使わない）
     const addForm = document.querySelector('#commentModal form');
     if (addForm) {
         const ret = encodeURIComponent(location.pathname + location.search);
         addForm.action = '/comment/add?ret=' + ret;
     }
 
-    // hidden の ret（元の方式に戻す）
+    // hidden の 
     const retEl = document.getElementById('cm-ret');
     if (retEl) {
         retEl.value = location.pathname + location.search;
     }
 
-    // ログインユーザーID（必ず存在する前提）
+    // ログインユーザーID
     const loginUserId = document.getElementById('loginUserId').value;
 
     // コメント描画（本人のみ編集/削除表示）
@@ -263,7 +301,7 @@ function openCommentModal(button) {
         }).join("")
         : `<div class="comment"><div class="comment-body">まだコメントはありません</div></div>`;
 
-    // 日付の相対表示（定義があれば）
+    // 日付の相対表示
     if (typeof dateConvertTimes === "function") {
         try { dateConvertTimes(); } catch (_) { }
     }

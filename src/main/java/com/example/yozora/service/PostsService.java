@@ -14,6 +14,7 @@ import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.yozora.entity.CommentWithUserEntity;
@@ -262,37 +263,40 @@ public class PostsService {
     }
 
     // 投稿編集処理（画像以外UPDATE、画像はDELETE→INSERT）
+    @Transactional
     public int updatePost(PostCreateForm form, Integer userId) {
 
-        try {
-            // 投稿情報（画像以外）を更新
-            PostsEntity postsEntity = convertToEntity(form);
-            postsEntity.setUserId(userId);
+        // 投稿情報（画像以外）を更新
+        PostsEntity postsEntity = convertToEntity(form);
+        postsEntity.setUserId(userId);
 
-            int resultRow = postsRepository.updatePost(postsEntity);
+        // 投稿情報（画像以外）を更新
+        int resultRow = postsRepository.updatePost(postsEntity);
 
-            // 投稿画像を投稿IDで一括削除
-            postsRepository.deletePostImages(form.getId());
+        // 投稿画像は全削除
+        postsRepository.deletePostImages(form.getId());
 
-            // 新たに画像ファイルを保存
-            List<String> pathToSave = saveImages(form.getImageFiles());
+        List<String> pathToSave;
 
-            // エンティティに変換
-            List<PostImagesEntity> postImagesEntity = convertToEntity(pathToSave);
-
-            // 投稿IDをセットし、INSERT
-            for (PostImagesEntity entity : postImagesEntity) {
-                entity.setPostId(form.getId());
-                postsRepository.insertPostImages(entity);
-            }
-
-            return resultRow;
-
-        } catch (Exception e) {
-            System.err.println("updatePostで失敗: " + e.getMessage());
-            e.printStackTrace();
-            return 0;
+        // 新規ファイルがあるかチェック
+        if (!form.getImageFiles().isEmpty() && !form.getImageFiles().get(0).isEmpty()) {
+            // 新規ファイルあり
+            pathToSave = saveImages(form.getImageFiles());
+        } else {
+            // ファイルなし → 既存URLをそのまま使う
+            pathToSave = form.getImageUrls();
         }
+
+        // エンティティに変換
+        List<PostImagesEntity> postImagesEntity = convertToEntity(pathToSave);
+
+        // 投稿IDをセットし、INSERT
+        for (PostImagesEntity entity : postImagesEntity) {
+            entity.setPostId(form.getId());
+            postsRepository.insertPostImages(entity);
+        }
+
+        return resultRow;
     }
 
     // 投稿IDで削除
@@ -391,12 +395,6 @@ public class PostsService {
 
         return form;
     }
-    // public PostCreateForm convertToForm(PostsEntity entity) {
-
-    // PostCreateForm form = modelMapper.map(entity, PostCreateForm.class);
-
-    // return form;
-    // }
 
     // 画像ファイルの処理メソッド
     public List<String> saveImages(List<MultipartFile> imageFiles) {

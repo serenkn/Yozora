@@ -74,7 +74,6 @@ main {
 .profile-info {
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
     gap: 5px;
     color: #fff;
 }
@@ -249,7 +248,7 @@ main {
     background: #222;
 }
 
-/* --- 編集/削除ボタン共通エリア（※投稿用だけに限定） --- */
+/* --- 編集/削除ボタン共通エリア --- */
 .edit-delete {
     display: flex;
     justify-content: flex-end;
@@ -296,7 +295,6 @@ main {
     z-index: 10000;
     background: rgba(0, 0, 0, 0.65);
     justify-content: flex-end;
-    /* ← 一覧と同じ右側展開 */
 }
 
 /* 本体 */
@@ -435,7 +433,7 @@ main {
     cursor: pointer;
 }
 
-/* 編集ボタン hover */
+/* 編集ボタン */
 .comment-actions button:hover {
     background: rgba(0, 0, 0, 0.10);
 }
@@ -456,7 +454,7 @@ body.modal-open {
     overflow: hidden;
 }
 
-/* ===== 編集モーダル（詳細と同じ見た目を共通化）===== */
+/* ===== 編集モーダル ===== */
 #editModal {
     display: none;
     position: fixed;

@@ -4,64 +4,71 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${pageType == 'edit'} ? '投稿編集' : '新規投稿'">新規投稿</title>
-    <link rel="stylesheet" th:href="@{/css/post.css}">
+    <link rel="stylesheet" th:href="@{/css/post_create.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js" defer></script>
     <script th:src="@{/js/post.js}" defer></script>
 </head>
 
 <body th:data-page="${pageType}">
-    <header>
-        <div class="form-header">
-            <h1 th:text="${pageType == 'edit'} ? '投稿を編集' : '新規投稿'">新規投稿</h1>
-        </div>
-    </header>
 
     <div id="wrapper">
+
+        <header>
+            <h1 th:text="${pageType == 'edit'} ? '投稿を編集して星いな～' : '新規投稿して星いな～'">新規投稿して星いな～</h1>
+        </header>
+
         <main>
-            <div id="form-area">
+            <div class="post-card">
+
                 <form th:action="@{/post/save}" th:object="${postCreateForm}" method="post"
                     enctype="multipart/form-data">
+                    <input type="hidden" th:field="*{id}">
 
-                    <!-- 画像カルーセル（Swiper） -->
-                    <div class="swiper">
-                        <div th:each="img : ${postCreateForm.imageUrls}">
-                            <input type="hidden" name="imageUrls" th:value="${img}"></input>
+                    <!-- 画像カルーセル -->
+                    <div class="swiper post-carousel">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" th:each="url, stat : ${postCreateForm.imageUrls}">
+                                <div class="preview-box">
+                                    <img th:src="@{${url}}" alt="投稿画像" class="carousel-image">
+                                    <button type="button" class="delete-btn" th:if="${pageType == 'edit'}"
+                                        th:attr="data-index=${stat.index}">×</button>
+                                    <input type="hidden" name="imageUrls" th:value="${url}">
+                                </div>
+                            </div>
                         </div>
+                        <div class="swiper-pagination"></div>
                         <div class="swiper-button-prev"></div>
                         <div class="swiper-button-next"></div>
-                        <div class="swiper-pagination"></div>
                     </div>
 
-
-                    <!-- 画像アップロード -->
+                    <!-- 画像アップロード（編集のみ） -->
                     <div class="form-center">
-                        <label for="imageInput" class="form-label">画像を選択（複数可）</label>
-                        <input type="file" id="imageInput" th:field="*{imageFiles}" multiple accept="image/*">
+                        <label for="imageInput" class="file-label">画像を選択</label>
+                        <input id="imageInput" type="file" name="images" accept="image/*" multiple>
                     </div>
 
                     <!-- タイトル -->
                     <div class="form-center">
-                        <label for="title" class="form-label">タイトル:</label>
+                        <label for="title" class="form-label">タイトル</label>
                         <input id="title" type="text" th:field="*{title}" placeholder="タイトルを入力">
                     </div>
                     <div class="form-validate">
                         <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="errors"></span>
                     </div>
 
-                    <!-- 説明 -->
+                    <!-- 概要 -->
                     <div class="form-center">
-                        <label for="text" class="form-label">説明:</label>
+                        <label for="text" class="form-label">概要欄</label>
                         <textarea id="text" th:field="*{text}" placeholder="説明文を入力" rows="4"></textarea>
                     </div>
                     <div class="form-validate">
                         <span th:if="${#fields.hasErrors('text')}" th:errors="*{text}" class="errors"></span>
                     </div>
 
-                    <!-- 住所（表示のみ） -->
+                    <!-- 住所 -->
                     <div class="form-center">
-                        <label class="form-label">住所:</label>
-                        <input type="text" th:field="*{address}" readonly>
+                        <p class="post-address" th:text="*{address}"></p>
                     </div>
 
                     <!-- 緯度経度（hidden） -->
@@ -70,7 +77,7 @@
 
                     <!-- 投稿ボタン -->
                     <div class="form-btn">
-                        <input type="submit" value="投稿する" class="btn">
+                        <input type="submit" value="投稿" class="btn">
                     </div>
 
                     <div class="form-center">
@@ -79,7 +86,9 @@
                 </form>
 
                 <!-- 戻るボタン -->
-                <button onclick="history.back()">← 戻る</button>
+                <div class="form-btn">
+                    <button class="back-btn" onclick="history.back()">戻る</button>
+                </div>
 
             </div>
         </main>

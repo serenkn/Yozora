@@ -6,7 +6,6 @@
     background: #222;
     padding: 10px 12px;
     gap: 16px;
-    /* 適宜 */
 }
 
 /* ボタン本体（全域クリック） */
@@ -15,14 +14,12 @@
     align-items: center;
     gap: 8px;
     padding: 10px 14px;
-    /* 全ボタン統一 */
     border-radius: 999px;
     color: #fff;
     text-decoration: none;
     font-weight: 600;
     font-size: 14px;
     line-height: 1;
-    /* 高さブレ防止 */
     transition: background .2s, box-shadow .2s, color .2s;
 }
 
@@ -38,7 +35,7 @@
     color: #fff;
 }
 
-/* アイコン（画像） */
+/* アイコン */
 .footer-nav .nav-item .avatar {
     width: 24px;
     height: 24px;
@@ -46,7 +43,6 @@
     overflow: hidden;
     flex: 0 0 24px;
     pointer-events: none;
-    /* ← 画像の上でも親<a>をクリック */
 }
 
 .footer-nav .nav-item .avatar img {

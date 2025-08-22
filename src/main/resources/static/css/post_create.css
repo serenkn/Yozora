@@ -1,0 +1,205 @@
+/* ================== 基本 ================== */
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Yu Gothic', sans-serif;
+    background: url("/images/star_background.jpg") center center / cover fixed no-repeat;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    padding: 16px 0 80px;
+    overflow-y: auto;
+}
+
+/* 投稿詳細カード */
+.post-card {
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 14px 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(4px);
+    width: min(600px, 92vw);
+    margin: 0px auto 80px;
+}
+
+/* ================== タイトル ================== */
+h1 {
+    font-size: 24px;
+    margin-bottom: 12px;
+    color: white;
+    text-align: center;
+}
+
+/* ================== 画像カルーセル ================== */
+.post-carousel {
+    border-radius: 10px;
+    overflow: hidden;
+    background: #eee;
+    margin: 10px 0;
+}
+
+.post-carousel .swiper,
+.post-carousel .swiper-wrapper,
+.post-carousel .swiper-slide {
+    height: auto;
+}
+
+.carousel-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: unset;
+    object-position: center;
+}
+
+.post-carousel .swiper-button-prev,
+.post-carousel .swiper-button-next {
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+}
+
+.post-carousel .swiper-pagination-bullet {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.post-carousel .swiper-pagination-bullet-active {
+    background: #000;
+}
+
+/* プレビュー箱（×の基準位置） */
+.preview-box {
+    position: relative;
+}
+
+/* ============ 画像削除ボタン（右上・白の半透明円） ============ */
+.delete-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .75);
+    color: #000;
+    font-size: 18px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background .2s ease;
+}
+
+.delete-btn:hover {
+    background: rgba(255, 255, 255, .9);
+}
+
+/* ===== 画像選択ボタン ===== */
+#imageInput {
+    display: none;
+}
+
+.file-label {
+    background-color: transparent;
+    color: black;
+    border: 1px solid black;
+    padding: 4px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.8rem;
+}
+
+.file-label :hover {
+    background-color: (255, 255, 255, 0.2);
+}
+
+/* ================== 本文・住所 ================== */
+.form-center {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+/* ===== タイトル入力欄 ===== */
+.form-center input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* ===== 概要欄 ===== */
+.form-center textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+}
+
+/* ===== 住所（読み取り表示） ===== */
+.post-address {
+    margin: 0;
+    font-size: 13px;
+    color: black;
+}
+
+/* 登録ボタン */
+.btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #444;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* 戻る */
+.back-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: white;
+    color: #444;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.22);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #222;
+}
+
+.back-btn:hover {
+    background-color: #f0f0f0;
+}
+
+/* ================== スマホ微調整 ================== */
+@media (max-width: 480px) {
+    .post-actions {
+        gap: 12px;
+    }
+
+    .comment-date {
+        font-size: 11px;
+    }
+}

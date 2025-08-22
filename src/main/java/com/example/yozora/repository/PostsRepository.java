@@ -343,7 +343,7 @@ public class PostsRepository {
 
     // 投稿情報（画像以外）を更新
     public int updatePost(PostsEntity entity) {
-        String sql = "UPDATE posts SET title = ?, texts = ?, address = ?, latitude = ?, longitude = ? WHERE id = ?";
+        String sql = "UPDATE posts SET title = ?, text = ?, address = ?, latitude = ?, longitude = ? WHERE id = ?";
 
         Object[] parameters = {
                 entity.getTitle(),
