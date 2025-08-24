@@ -6,25 +6,31 @@ Google Map上にピンを立てて投稿し、全国の絶景スポットを記�
 
 ---
 
-##　実際の画面
+## 実際の画面
 
 - ログイン画面
 <img width="1361" height="628" alt="ログイン画面" src="https://github.com/user-attachments/assets/5007ecce-2cbd-4c91-972f-24bdc68d6739" />
 
+
 - 新規登録画面
 <img width="1359" height="627" alt="新規登録画面" src="https://github.com/user-attachments/assets/13e83310-1bd3-4c29-988f-52cbbd831c79" />
+
 
 - TOP画面
 <img width="1363" height="632" alt="TOP画面" src="https://github.com/user-attachments/assets/d3e8f397-7fe0-4dfe-b058-c54d01395bb7" />
 
+
 - 景色一覧画面
 <img width="1364" height="632" alt="景色一覧画面" src="https://github.com/user-attachments/assets/4fbd8653-6ed7-47aa-84d5-3f776883ba26" />
+
 
 - マイページ画面
 <img width="1365" height="631" alt="マイページ画面、投稿あり" src="https://github.com/user-attachments/assets/371d034c-3eef-4d5f-b031-44090c027821" />
 
+
 - 投稿詳細画面
 <img width="1343" height="622" alt="詳細画面" src="https://github.com/user-attachments/assets/91afb741-7028-449f-8a58-4bb6b3b3e0f2" />
+
 
 - プロフィール編集画面
 <img width="1365" height="625" alt="ユーザー編集画面" src="https://github.com/user-attachments/assets/3dae5829-c808-414f-9268-a97c1d973d6b" />
@@ -93,6 +99,8 @@ Google Map上にピンを立てて投稿し、全国の絶景スポットを記�
 ### External APIs / SDK
 - Google Maps JavaScript API
 
+---
+
 ### 選定理由
 
 本アプリは **Javaをメイン言語として開発**しました。
@@ -107,11 +115,11 @@ Google Map上にピンを立てて投稿し、全国の絶景スポットを記�
 - **Docker Compose**: 環境差異をなくし、再現性を確保。  
 - **Google Maps API**: 景色共有アプリの地図・ピン立てに必須。
 
-### DB
-<img width="1020" height="429" alt="Yozora_ER図" src="https://github.com/user-attachments/assets/c6817552-2dad-4b34-a9b0-484f26d318f7" />
+---
 
 # セットアップ
 - JDK
 - Docker
 - 手順
--docker compose up --build →　http://localhost:8080/login　で起動
+-docker compose up --build →　http://localhost:8080/login
+で起動
