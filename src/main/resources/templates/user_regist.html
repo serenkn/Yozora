@@ -23,7 +23,7 @@
                         <input id="userName" size="30" th:field="*{userName}" placeholder="Yozora">
                     </div>
                     <div class="form-validate">
-                        <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="errors"></span>
+                        <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="error"></span>
                     </div>
 
                     <div class="form-center">
@@ -31,7 +31,7 @@
                         <input id="email" size="30" th:field="*{email}" placeholder="star-4649@yozora.com">
                     </div>
                     <div class="form-validate">
-                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="errors"></span>
+                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></span>
                     </div>
 
                     <div class="form-center">
@@ -41,14 +41,14 @@
 
                     </div>
                     <div class="form-validate">
-                        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="errors"></span>
+                        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></span>
                     </div>
 
                     <div class="form-btn">
                         <input type="submit" value="登録" class="btn">
                     </div>
                     <div class="form-center">
-                        <span th:text="${error}" class="errors"></span>
+                        <span th:text="${error}" class="error"></span>
                     </div>
 
                 </form>

@@ -8,7 +8,7 @@
     gap: 16px;
 }
 
-/* ボタン本体（全域クリック） */
+/* ボタン本体 */
 .footer-nav .nav-item {
     display: inline-flex;
     align-items: center;

@@ -2,8 +2,8 @@
 
 ## 概要
 
-**Yozora** は、星や夜景などの「美しい景色」を共有できるWebアプリです。  
-ユーザーは投稿・検索・コメント・いいね・フォローなどの機能を通じて、全国の絶景スポットを記録・共有できます。
+**Yozora** は、星や夜景などの写真を共有できるWebアプリです。  
+Google Map上にピンを立てて投稿し、全国の絶景スポットを記録・共有できます。
 
 
 ---
@@ -21,16 +21,48 @@
 
 ## 技術スタック
 
-| 項目           | 使用技術                               |
-|---------------|--------------------------------------|
-| 言語           | Java 21                              |
-| フレームワーク 　 | Spring Boot                          |
-| データベース     | MySQL                                |
-| フロント        | HTML / CSS / JavaScript / Thymeleaf  | 
-| API           | Google Maps API                      |
-| その他    　    | Docker / GitHub / VS Code            |
+### Backend
+- Java 21
+- Spring Boot 3.5.3
+- Spring Web
+- Spring Data JPA
+- Spring JDBC
+- Spring Validation
+- Spring Security
+- ModelMapper 3.2.0
+- Lombok
+- Maven
 
----
+### Frontend
+- Thymeleaf
+- JavaScript (ES202x)
+- Swiper.js
+- CSS
+
+### Database
+- MySQL 8.x
+  - 主要テーブル：`users`, `posts`, `post_images`, `comments`, `likes`
+
+### Infra / DevOps
+- Docker Compose（`app` / `db` のコンテナ構成）
+- GitHub
+
+### External APIs / SDK
+- Google Maps JavaScript API
+
+### 選定理由
+
+本アプリは **Javaをメイン言語として開発**しました。
+
+- **Java 21**: 最新LTSでモダンな構文を利用可能。  
+- **Spring Boot 3.5.3**: Webアプリ開発に必要な機能を統合、開発効率が高い。  
+- **Spring Web**: 
+- **Spring Data JPA**: CRUD処理の効率化。  
+- **Spring Security**: 認証・認可を標準的かつ安全に実装。  
+- **Thymeleaf**: SSRでフォーム処理と相性が良い。  
+- **MySQL 8.x**: 一般的なRDBMSで、実務と学習両面で有効。  
+- **Docker Compose**: 環境差異をなくし、再現性を確保。  
+- **Google Maps API**: 景色共有アプリの地図・ピン立てに必須。
 
 ## 環境構築（Docker使用）
 
@@ -45,4 +77,4 @@ git commit -m "コメント"
 git push origin main
 
 
-http://localhost:8080/login0/login
+http://localhost:8080/login

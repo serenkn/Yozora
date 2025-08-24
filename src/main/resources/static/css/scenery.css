@@ -96,7 +96,7 @@ main {
     color: #000;
 }
 
-/* タイトル/本文などテキスト */
+/* タイトル、本文などテキスト */
 .post-title {
     font-weight: 700;
     margin: 8px 0 6px;
@@ -110,28 +110,31 @@ main {
     color: #222;
 }
 
-/* 画像カルーセル（Swiper）*/
+/* ================== 画像カルーセル ================== */
 .post-carousel {
-    border-radius: 10px;
-    overflow: hidden;
-    background: #111;
-    margin: 10px 0;
-}
-
-/* Swiperの高さを画像に合わせる */
-.post-carousel .swiper,
-.post-carousel .swiper-wrapper,
-.post-carousel .swiper-slide {
-    height: auto;
-}
-
-/* 画像は中央トリミングで余白なし */
-.post-carousel .carousel-image {
     width: 100%;
+    overflow: hidden;
+    display: inline-block;
+    margin: 10px auto;
+    background: black;
+}
+
+/* スライドを画像サイズに合わせる */
+.post-carousel .swiper-slide {
+    flex: 0 0 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 画像は縦上限内で100%表示 */
+.post-carousel .carousel-image {
+    max-height: 300px;
+    max-width: 100%;
     height: auto;
+    width: auto;
+    object-fit: contain;
     display: block;
-    object-fit: unset;
-    object-position: center;
 }
 
 /* いいね コメント ルート */
@@ -325,7 +328,7 @@ main {
     color: #333;
 }
 
-/* フッター（送信フォーム） */
+/* 送信フォーム */
 .comment-form {
     display: flex;
     gap: 8px;
@@ -374,7 +377,7 @@ main {
     cursor: pointer;
 }
 
-/* 編集ボタン hover */
+/* 編集ボタン */
 .comment-actions button:hover {
     background: rgba(0, 0, 0, 0.10);
 }

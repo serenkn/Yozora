@@ -58,7 +58,7 @@
         <section class="post-list">
             <!-- 投稿がない場合の表示 -->
             <div class="no-posts" th:if="${postList == null or postList.isEmpty()}">
-                <p>投稿がありません</p>
+                <p><strong>投稿がありません</strong></p>
             </div>
 
             <!-- 投稿がある場合の表示 -->
@@ -67,8 +67,8 @@
 
                     <!-- 投稿者情報 -->
                     <div class="user-info">
-                        <img th:src="@{${post.profileImage}}" class="user-icon" alt="アイコン">
-                        <span th:text="${post.userName}" class="user-name"></span>
+                        <img th:src="@{${user.profileImage}}" class="user-icon" alt="アイコン">
+                        <span th:text="${user.userName}" class="user-name"></span>
                     </div>
 
                     <!-- タイトル -->

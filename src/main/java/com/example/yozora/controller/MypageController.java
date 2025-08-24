@@ -43,7 +43,7 @@ public class MypageController {
             model.addAttribute("error", "投稿がありません");
         }
 
-        // フォロー・フォロワー数（今は仮）
+        // フォロー・フォロワー数
         // model.addAttribute("followCount", 0);
         // model.addAttribute("followerCount", 0);
 

@@ -87,9 +87,19 @@ public class UsersController {
             BindingResult result,
             Model model) {
 
+        // 新しい画像が選択されているか確認
+        boolean newImageSelected = form.getProfileImage() != null && !form.getProfileImage().isEmpty();
+
         if (result.hasErrors()) {
+
+            // 新しい画像が選択されている場合、画像URLをクリア
+            if (newImageSelected) {
+                model.addAttribute("imageError", "選んだ画像はクリアされました。もう一度選択してください。");
+            }
+
             return "user_edit";
         }
+
         // // ユーザー情報の取得:id
         String email = loginUser.getUsername();
         UsersEntity user = usersService.getUserByEmail(email);

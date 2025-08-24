@@ -13,6 +13,9 @@ target/
 # OSゴミファイル
 Thumbs.db
 
+# 画像を除外
+/images/
+
 # 環境設定ファイル
 .env
 .docker/

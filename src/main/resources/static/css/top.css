@@ -1,4 +1,4 @@
-/* ======== レイアウト ======== */
+/* ======================= レイアウト ======================= */
 :root {
     --footer-h: 50px;
 }
@@ -21,19 +21,162 @@ main {
     width: 100%;
 }
 
-
-/* ======== Google Mapエリア ======== */
+/* ================== Google Map エリア ================== */
 #map {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     height: 100%;
     width: 100%;
 }
 
-/* ======== UI配置（左上まとめ） ======== */
+/* ================== InfoWindow：詳細画面 ================== */
+.gm-style .gm-style-iw-c {
+    padding: 0 !important;
+}
+
+.gm-style-iw,
+.gm-style-iw-d {
+    max-height: none !important;
+    overflow: visible !important;
+}
+
+/* 本体カード */
+.map-infobox {
+    width: 250px;
+    background: rgba(255, 255, 255, .95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    box-shadow: none;
+    backdrop-filter: blur(4px);
+    color: #000;
+    padding: 14px 16px;
+    box-sizing: border-box;
+    font-family: 'Yu Gothic', sans-serif;
+}
+
+/* ヘッダー */
+.map-infobox__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.map-infobox__icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.map-infobox__user {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* タイトル */
+.map-infobox__title {
+    margin-top: 8px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+/* 画像 */
+.map-infobox__image-wrap {
+    margin-top: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #eee;
+}
+
+.map-infobox__image {
+    display: block;
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+}
+
+/* メタ情報 */
+.map-infobox__meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 8px;
+    font-size: 10px;
+    color: black;
+}
+
+.map-infobox__route {
+    background: none;
+    border: none;
+    font-size: 10px;
+    color: #007bff;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* 詳細ボタン */
+.detail-link {
+    margin-top: 10px;
+}
+
+/* 詳細ボタン */
+.detail-link button {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: none;
+    background: #444;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color .15s ease;
+}
+
+.detail-link button:hover {
+    background: #222;
+}
+
+/* ================== InfoWindow：投稿ボタン ================== */
+.infobox {
+    width: 90px;
+    height: 50px;
+    padding: 6px;
+    background: rgba(255, 255, 255, .95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    box-shadow: none;
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    box-sizing: border-box;
+    font-family: 'Yu Gothic', sans-serif;
+}
+
+.post-link-btn {
+    display: inline-block;
+    width: auto;
+    max-width: 100%;
+    padding: 6px 10px;
+    border-radius: 10px;
+    border: none;
+    background: #444;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color .15s ease;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.post-link-btn:hover {
+    background: #222;
+}
+
+/* ================== UI配置 ================== */
 #map-controls {
     position: absolute;
     top: 20px;
@@ -44,7 +187,6 @@ main {
     gap: 20px;
 }
 
-/* 地図切替ボタン群（縦並び） */
 .left-ui .map-toggle {
     display: flex;
     flex-direction: column;
@@ -58,7 +200,7 @@ main {
     border-radius: 6px;
     background-color: #fff;
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
 }
 
 .map-toggle button:hover {
@@ -78,7 +220,7 @@ main {
     padding: 0 14px;
     font-size: 14px;
     border: 1px solid #ccc;
-    background-color: white;
+    background-color: #fff;
 }
 
 /* 検索候補リスト */
@@ -86,10 +228,10 @@ main {
     list-style: none;
     margin-top: 8px;
     padding: 0;
-    background-color: white;
-    color: black;
+    background-color: #fff;
+    color: #000;
     border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .15);
     max-height: 200px;
     overflow-y: auto;
     width: 240px;
@@ -104,4 +246,11 @@ main {
 
 .suggestion-item:hover {
     background-color: #f2f2f2;
+}
+
+/* 狭い端末向け */
+@media (max-width: 360px) {
+    .map-infobox {
+        width: 280px;
+    }
 }

@@ -25,15 +25,15 @@
                     enctype="multipart/form-data">
                     <input type="hidden" th:field="*{id}">
 
-                    <!-- 画像カルーセル -->
+                    <!-- 画像複数枚表示 -->
                     <div class="swiper post-carousel">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide" th:each="url, stat : ${postCreateForm.imageUrls}">
+                            <div class="swiper-slide" th:each="img, stat : ${postCreateForm.imageUrls}">
                                 <div class="preview-box">
-                                    <img th:src="@{${url}}" alt="投稿画像" class="carousel-image">
-                                    <button type="button" class="delete-btn" th:if="${pageType == 'edit'}"
+                                    <img th:src="@{${img}}" alt="投稿画像" class="carousel-image">
+                                    <button type="button" class="delete-btn"
                                         th:attr="data-index=${stat.index}">×</button>
-                                    <input type="hidden" name="imageUrls" th:value="${url}">
+                                    <input type="hidden" name="imageUrls" th:value="${img}">
                                 </div>
                             </div>
                         </div>
@@ -47,6 +47,9 @@
                         <label for="imageFiles" class="file-label">画像を選択</label>
                         <input id="imageFiles" type="file" th:field="*{imageFiles}" accept="image/*" multiple>
                     </div>
+                    <div class="form-validate">
+                        <span th:if="${imageError}" th:text="${imageError}" class="error"></span>
+                    </div>
 
                     <!-- タイトル -->
                     <div class="form-center">
@@ -54,7 +57,7 @@
                         <input id="title" type="text" th:field="*{title}" placeholder="タイトルを入力">
                     </div>
                     <div class="form-validate">
-                        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="errors"></span>
+                        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="error"></span>
                     </div>
 
                     <!-- 概要 -->
@@ -63,7 +66,7 @@
                         <textarea id="text" th:field="*{text}" placeholder="説明文を入力" rows="4"></textarea>
                     </div>
                     <div class="form-validate">
-                        <span th:if="${#fields.hasErrors('text')}" th:errors="*{text}" class="errors"></span>
+                        <span th:if="${#fields.hasErrors('text')}" th:errors="*{text}" class="error"></span>
                     </div>
 
                     <!-- 住所 -->
@@ -78,18 +81,19 @@
 
                     <!-- 投稿ボタン -->
                     <div class="form-btn">
-                        <input type="submit" value="投稿" class="btn">
+                        <input type="submit" th:value="*{id} != null ? '更新' : '投稿'" class="btn">
                     </div>
 
                     <div class="form-center">
-                        <span th:text="${error}" class="errors"></span>
+                        <span th:text="${error}" class="error"></span>
                     </div>
                 </form>
 
                 <!-- 戻るボタン -->
-                <div class="form-btn">
-                    <button class="back-btn" onclick="history.back()">戻る</button>
-                </div>
+                <form th:action="@{/back}" method="post" class="form-btn">
+                    <input type="hidden" id="ret" name="ret" value="">
+                    <button type="submit" class="back-btn">戻る</button>
+                </form>
 
             </div>
         </main>

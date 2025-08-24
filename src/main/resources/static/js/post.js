@@ -2,6 +2,36 @@
 const page = document.body.dataset.page;
 const showDelete = (page === 'create' || page === 'edit');
 
+// ===== 戻る先設定 =====
+(() => {
+    const backInput = document.getElementById('ret');
+    if (!backInput) return;
+
+    // referrer を見て戻り先を決定
+    const ref = document.referrer;
+    let target = "/top"; // デフォルト
+
+    try {
+        if (ref) {
+            const refUrl = new URL(ref);
+            if (refUrl.origin === location.origin) {
+                const path = refUrl.pathname;
+                if (path.startsWith("/mypage")) {
+                    target = "/mypage";
+                } else if (path.startsWith("/scenery")) {
+                    target = "/scenery";
+                } else if (path.startsWith("/top")) {
+                    target = "/top";
+                }
+            }
+        }
+    } catch (e) {
+        // URL が不正なら無視してデフォルト
+    }
+
+    backInput.value = target;
+})();
+
 // ===== Swiper 初期化 =====
 let swiper;
 function initSwiper() {
@@ -9,6 +39,9 @@ function initSwiper() {
         autoHeight: true,
         loop: false,
         slidesPerView: 1,
+        centeredSlides: false,
+        observer: true,
+        observeParents: true,
         navigation: {
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev'
@@ -39,7 +72,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // ===== 新規・編集：画像アップロード & プレビュー =====
 function initImageUploadWithPreview() {
-    initSwiper();
 
     const input = document.getElementById('imageFiles');
     const wrapper = document.querySelector('.swiper-wrapper');
@@ -47,21 +79,21 @@ function initImageUploadWithPreview() {
 
     if (!input || !wrapper || !form) return;
 
-    // 1) 初期の既存URLをキャッシュ（後で選び直し時に復元するため）
+    // 初期の既存URLをキャッシュ（後で選び直し時に復元するため）
     let existingUrls = Array.from(form.querySelectorAll('input[name="imageUrls"]'))
         .map(el => el.value);
 
     // 既存URLからスライドを再描画（選び直し用）
     function renderExisting() {
         wrapper.innerHTML = '';
-        existingUrls.forEach(url => {
+        existingUrls.forEach(img => {
             const slide = document.createElement('div');
             slide.className = 'swiper-slide';
             slide.innerHTML = `
                 <div class="preview-box">
-                    <img src="${url}" alt="投稿画像" class="carousel-image">
-                    ${showDelete ? `<button type="button" class="delete-btn">×</button>` : ''}
-                    <input type="hidden" name="imageUrls" value="${url}">
+                    <img src="${img}" alt="投稿画像" class="carousel-image">
+                    ${showDelete ? '<button type="button" class="delete-btn">×</button>' : ''}
+                    <input type="hidden" name="imageUrls" value="${img}">
                 </div>
             `;
             wrapper.appendChild(slide);
@@ -70,21 +102,26 @@ function initImageUploadWithPreview() {
         swiper.slideTo(0);
     }
 
-    // 2) ファイル選択 → 「全入れ替えモード」で新規のみ表示（既存は表示から外れる）
+    //  ファイル選択 → 新規のみ表示（既存の写真は表示から外れる）
     input.addEventListener('change', () => {
-        wrapper.innerHTML = '';
         const files = Array.from(input.files);
+
+        // キャンセルのときは何も壊さず既存を復元
+        if (!files.length) {
+            renderExisting();
+            return;
+        }
+
+        wrapper.innerHTML = '';
         files.forEach(file => {
             const reader = new FileReader();
             reader.onload = function (e) {
                 const slide = document.createElement('div');
                 slide.className = 'swiper-slide';
-                // data-new で「新規スライド」印を付与（hiddenは作らない）
-                slide.setAttribute('data-new', 'true');
                 slide.innerHTML = `
                     <div class="preview-box">
-                        <img src="${e.target.result}" alt="preview">
-                        ${showDelete ? `<button type="button" class="delete-btn">×</button>` : ''}
+                        <img src="${e.target.result}" alt="preview" class="carousel-image">
+                        ${showDelete ? '<button type="button" class="delete-btn">×</button>' : ''}
                     </div>
                 `;
                 wrapper.appendChild(slide);
@@ -95,7 +132,7 @@ function initImageUploadWithPreview() {
         if (files.length) swiper.slideTo(0);
     });
 
-    // 3) バツボタン
+    // バツボタン
     if (showDelete) {
         document.addEventListener('click', function (e) {
             if (!e.target.classList.contains('delete-btn')) return;
@@ -103,30 +140,24 @@ function initImageUploadWithPreview() {
             const slide = e.target.closest('.swiper-slide');
             if (!slide) return;
 
-            // 3-1) 既存スライド：hiddenを持っている → その1枚だけ削除
+            // 既存スライド：hiddenを持っている → その1枚だけ削除
             const hidden = slide.querySelector('input[name="imageUrls"]');
             if (hidden) {
-                // existingUrls からも削除して整合
                 const url = hidden.value;
                 existingUrls = existingUrls.filter(u => u !== url);
-
                 slide.remove();
                 swiper.update();
                 return;
-            }
-
-            // 3-2) 新規スライド：個別削除は不可 → いったん全部クリアして選び直し
-            if (slide.hasAttribute('data-new')) {
-                if (confirm('新規追加は全入れ替えです。この選択をクリアして選び直しますか？')) {
-                    // 入力とプレビューをリセット
-                    input.value = '';
-                    renderExisting(); // 既存を復元
-                }
+            } else {
+                // 新規スライド（hiddenなし）→ その1枚だけ削除
+                slide.remove();
+                swiper.update();
+                input.value = '';
             }
         });
     }
 
-    // 4) 送信前チェック（新規 or 既存のどちらかが1枚以上）
+    // 送信前チェック（新規 or 既存のどちらかが1枚以上）
     form.addEventListener('submit', function (e) {
         const hasFiles = input.files && input.files.length > 0;
         const hasExisting = form.querySelectorAll('input[name="imageUrls"]').length > 0;
@@ -135,11 +166,6 @@ function initImageUploadWithPreview() {
             alert('画像を1枚以上選択してください');
         }
     });
-}
-
-// ===== 投稿詳細：Swiper 初期化 =====
-function initDetailView() {
-    initSwiper();
 }
 
 // ===== Google マップへルート案内 =====
@@ -321,9 +347,11 @@ function closeCommentModal() {
 // ===== 日付変換 =====
 function formatDateTime(dateTimeString) {
     const now = new Date();
-    const target = new Date(dateTimeString);
+    const parsed = new Date(dateTimeString);
+    if (isNaN(parsed)) return '日時エラー';
 
-    if (isNaN(target)) return '日時エラー';
+    // DBはUTCで保存するから日本用に補正
+    const target = new Date(parsed.getTime() + 9 * 60 * 60 * 1000);
 
     const diffMs = now - target;
     const diffSec = Math.floor(diffMs / 1000);
@@ -384,11 +412,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ===== 初期化 =====
 function init() {
-    if (showDelete) {
-        initImageUploadWithPreview();
-    } else {
-        initDetailView();
-    }
+    initSwiper();
+
+    initImageUploadWithPreview();
 
     dateConvertTimes();
     restoreScrollPosition();

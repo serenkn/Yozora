@@ -68,13 +68,6 @@ public class CommentsController {
 
         String target = (ret != null && ret.startsWith("/")) ? ret : "/scenery";
 
-        // if (result.hasErrors()) {
-
-        // // model.addAttribute("error", form.getId());
-
-        // return "redirect:" + target;
-        // }
-
         String email = loginUser.getUsername();
         UsersEntity user = usersService.getUserByEmail(email);
         System.out.println("Editing comment for user: " + user);

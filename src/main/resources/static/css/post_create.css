@@ -47,42 +47,35 @@ h1 {
 
 /* ================== 画像カルーセル ================== */
 .post-carousel {
-    border-radius: 10px;
-    overflow: hidden;
-    background: #eee;
-    margin: 10px 0;
-}
-
-.post-carousel .swiper,
-.post-carousel .swiper-wrapper,
-.post-carousel .swiper-slide {
-    height: auto;
-}
-
-.carousel-image {
     width: 100%;
+    overflow: hidden;
+    display: inline-block;
+    margin: 10px auto;
+    background: black;
+}
+
+/* スライドを画像サイズに合わせる */
+.post-carousel .swiper-slide {
+    flex: 0 0 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 画像は縦上限内で100%表示 */
+.post-carousel .carousel-image {
+    max-height: 300px;
+    max-width: 100%;
     height: auto;
+    width: auto;
+    object-fit: contain;
     display: block;
-    object-fit: unset;
-    object-position: center;
 }
 
-.post-carousel .swiper-button-prev,
-.post-carousel .swiper-button-next {
-    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
-}
-
-.post-carousel .swiper-pagination-bullet {
-    background: rgba(0, 0, 0, 0.4);
-}
-
-.post-carousel .swiper-pagination-bullet-active {
-    background: #000;
-}
-
-/* プレビュー箱（×の基準位置） */
+/* プレビュー（×の基準位置） */
 .preview-box {
     position: relative;
+    justify-content: flex-end;
 }
 
 /* ============ 画像削除ボタン（右上・白の半透明円） ============ */
@@ -161,11 +154,18 @@ h1 {
     resize: none;
 }
 
-/* ===== 住所（読み取り表示） ===== */
+/* ===== 住所 ===== */
 .post-address {
     margin: 0;
     font-size: 13px;
     color: black;
+}
+
+/* エラーメッセージ */
+.error {
+    color: red;
+    font-size: 14px;
+    margin: 10px 0;
 }
 
 /* 登録ボタン */

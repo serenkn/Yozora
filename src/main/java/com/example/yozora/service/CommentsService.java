@@ -55,15 +55,6 @@ public class CommentsService {
         return comment;
     }
 
-    // // 投稿IDからコメント+ユーザー情報を取得（表示用）
-    // public List<CommentWithUserEntity> getCommentsByPostId(Integer postId) {
-
-    // List<CommentWithUserEntity> commentList =
-    // commentsRepository.findWithUserByPostId(postId);
-
-    // return commentList;
-    // }
-
     // フォーム → エンティティ（登録・編集用）
     private CommentsEntity convertToEntity(CommentForm form) {
 

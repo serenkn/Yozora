@@ -21,7 +21,7 @@ h1 {
 
 /* フォームエリア全体中央寄せ */
 #form-area {
-    max-width: 360px;
+    max-width: 200px;
     margin: 40px auto;
     padding: 24px;
     background-color: rgba(255, 255, 255, 0.95);
@@ -61,7 +61,7 @@ h1 {
     margin-bottom: 16px;
 }
 
-/* ログインボタン（共通ボタン） */
+/* ログインボタン */
 .btn {
     width: 100%;
     padding: 12px;

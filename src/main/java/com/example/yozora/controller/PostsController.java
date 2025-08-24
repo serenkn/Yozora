@@ -91,7 +91,27 @@ public class PostsController {
         model.addAttribute("pageType", pageType);
         model.addAttribute("postCreateForm", postForm);
 
+        // 新しい画像が選択されているか確認
+        boolean newImageSelected = postForm.getImageFiles() != null && !postForm.getImageFiles().isEmpty();
+
         if (result.hasErrors()) {
+
+            // 新しい画像が選択されている場合、画像URLをクリア
+            if (newImageSelected) {
+                model.addAttribute("imageError", "選んだ画像はクリアされました。もう一度選択してください。");
+            }
+
+            return "post_create";
+        }
+
+        // 追加チェック：画像が1枚もない場合 JSではじくが、念のためサーバー側でも
+        boolean noNewFiles = postForm.getImageFiles() == null || postForm.getImageFiles().isEmpty();
+        boolean noExisting = postForm.getImageUrls() == null || postForm.getImageUrls().isEmpty();
+
+        if (noNewFiles && noExisting) {
+
+            model.addAttribute("imageError", "画像を1枚以上選択してください");
+
             return "post_create";
         }
 
@@ -181,5 +201,14 @@ public class PostsController {
         }
 
         return "redirect:/mypage";
+    }
+
+    // 戻るボタン
+    @PostMapping("/back")
+    public String back(@RequestParam(value = "ret", required = false) String ret) {
+
+        String target = (ret != null && ret.startsWith("/")) ? ret : "/top";
+
+        return "redirect:" + target;
     }
 }

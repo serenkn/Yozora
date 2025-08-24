@@ -70,41 +70,35 @@ function addPostMarkers(posts) {
 
         marker.addListener("click", function () {
             const content = `
-                <div style="max-width: 250px; font-family: sans-serif;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div style="display: flex; align-items: center;">
-                            <img src="${post.profileImage}" alt="アイコン"
-                                style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; margin-right: 6px;"
-                                onerror="this.src='/images/default_profile.png'">
-                            <span style="font-size: 14px; color: black;">${post.userName}</span>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-top: 4px;">
-                        <strong style="font-size: 14px; color: black;">${post.title}</strong>
+               <div class="map-infobox">
+                    <div class="map-infobox__header">
+                        <img src="${post.profileImage}" alt="アイコン"
+                            class="map-infobox__icon"
+                            onerror="this.src='/images/default_icon.png'">
+                        <span class="map-infobox__user">${post.userName}</span>
                     </div>
 
-                    <div style="margin-top: 8px;">
+                    <div class="map-infobox__title"><strong>${post.title}</strong></div>
+
+                    <div class="map-infobox__image-wrap">
                         <img src="${post.imageUrls[0]}" alt="投稿画像"
-                            style="width: 100%; border-radius: 4px;"
-                            onerror="this.src='/images/default-image.jpg'">
+                            class="map-infobox__image"
+                            onerror="this.src='/images/test1.jpg'">
                     </div>
 
-                    <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; font-size: 13px; color: black;">
-                        <div>${post.createdAt}</div>
-                        <p class="post-time date-time" th:text="${post.createdAt}"></p>
-
+                    <div class="map-infobox__meta">
+                        <div>${formatDateTime(post.createdAt)}</div>
                         <div>⭐ ${post.likeCount}</div>
                         <div>💬 ${post.commentCount}</div>
-                        <button type="button" onclick="openGoogleMapsRoute(${post.latitude}, ${post.longitude})"
-                            style="background: none; border: none; font-size: 14px; color: #007bff; cursor: pointer;">
-                            📍ルート
+                        <button type="button" class="map-infobox__route"
+                                onclick="openGoogleMapsRoute(${post.latitude}, ${post.longitude})">
+                        📍ルート
                         </button>
                     </div>
 
-                    <form action="/post" style="text-align: right; margin-top: 6px;">
+                    <form action="/post" class="detail-link" style="margin-top:6px;">
                         <input type="hidden" name="id" value="${post.id}">
-                        <button type="submit" style="font-size: 13px; color: #007bff;">詳細はこちらへ</button>
+                        <button type="submit">詳細はこちらへ</button>
                     </form>
                 </div>
                 `;
@@ -138,8 +132,13 @@ function reverseGeocodeAndShowLink(lat, lng) {
             // InfoWindow 表示
             tempInfoWindow = new google.maps.InfoWindow({
                 content: `
-                    <div>
-                        <a href="/postCreate?lat=${lat}&lng=${lng}&address=${encodeURIComponent(address)}">投稿する</a>
+                     <div class="infobox">
+                        <div class="post-link">
+                            <a class="post-link-btn"
+                            href="/postCreate?lat=${lat}&lng=${lng}&address=${encodeURIComponent(address)}">
+                            投稿する
+                            </a>
+                        </div>
                     </div>`
             });
 

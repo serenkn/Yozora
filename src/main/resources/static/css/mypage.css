@@ -106,6 +106,13 @@ main {
     background-color: (255, 255, 255, 0.2);
 }
 
+.no-posts {
+    text-align: center;
+    color: #fff;
+    font-size: 1.2rem;
+    margin-top: 40px;
+}
+
 /* ====== 投稿リスト ====== */
 .post-list {
     display: flex;
@@ -162,26 +169,31 @@ main {
     color: #000;
 }
 
-/* 画像カルーセル（Swiper）*/
+/* ================== 画像カルーセル ================== */
 .post-carousel {
-    border-radius: 10px;
-    overflow: hidden;
-    background: #fff;
-    margin: 10px 0;
-}
-
-.post-carousel .swiper,
-.post-carousel .swiper-wrapper,
-.post-carousel .swiper-slide {
-    height: auto;
-}
-
-.post-carousel .carousel-image {
     width: 100%;
+    overflow: hidden;
+    display: inline-block;
+    margin: 10px auto;
+    background: black;
+}
+
+/* スライドを画像サイズに合わせる */
+.post-carousel .swiper-slide {
+    flex: 0 0 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 画像は縦上限内で100%表示 */
+.post-carousel .carousel-image {
+    max-height: 300px;
+    max-width: 100%;
     height: auto;
+    width: auto;
+    object-fit: contain;
     display: block;
-    object-fit: unset;
-    object-position: center;
 }
 
 /* アクション行 */
@@ -259,9 +271,10 @@ main {
 
 /* 編集ボタン（投稿用） */
 .edit-delete .edit-btn {
-    background: #444;
-    color: #fff;
-    border: none;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.22);
+    background: rgba(0, 0, 0, 0.04);
+    color: #222;
     padding: 6px 10px;
     border-radius: 6px;
     cursor: pointer;
@@ -269,14 +282,15 @@ main {
 }
 
 .edit-delete .edit-btn:hover {
-    background: #222;
+    background: rgba(0, 0, 0, 0.10);
 }
 
 /* 削除ボタン（投稿用） */
 .edit-delete .delete-btn {
-    background: #c33;
-    color: #fff;
-    border: none;
+    border-color: rgba(255, 80, 80, 0.4);
+    background: rgba(255, 80, 80, 0.1);
+    color: #b00020;
+    border: 1px solid rgba(0, 0, 0, 0.22);
     padding: 6px 10px;
     border-radius: 6px;
     cursor: pointer;
@@ -284,7 +298,7 @@ main {
 }
 
 .edit-delete .delete-btn:hover {
-    background: #a00;
+    background: rgba(255, 80, 80, 0.2);
 }
 
 /* ================== コメントモーダル ================== */
@@ -384,7 +398,7 @@ main {
     color: #333;
 }
 
-/* フッター（送信フォーム） */
+/* 送信フォーム */
 .comment-form {
     display: flex;
     gap: 8px;
@@ -454,7 +468,7 @@ body.modal-open {
     overflow: hidden;
 }
 
-/* ===== 編集モーダル ===== */
+/* ================== 編集モーダル ================== */
 #editModal {
     display: none;
     position: fixed;

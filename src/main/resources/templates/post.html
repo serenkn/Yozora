@@ -13,7 +13,10 @@
         <div class="post-card">
 
             <!-- 戻るボタン -->
-            <button onclick="history.back()">戻る</button>
+            <form th:action="@{/back}" method="post" class="back-form">
+                <input type="hidden" id="ret" name="ret" value="">
+                <button type="submit" class="back-btn">戻る</button>
+            </form>
 
             <!-- 投稿者情報 -->
             <div class="user-info">
@@ -24,11 +27,11 @@
             <!-- 投稿タイトル -->
             <h2 th:text="${post.title}"></h2>
 
-            <!-- Swiperカルーセル -->
-            <div class="swiper post-carousel">
-                <div class="swiper-wrapper" id="carousel-wrapper">
-                    <div class="swiper-slide" th:each="url : ${post.imageUrls}">
-                        <img th:src="@{${url}}" class="carousel-image" alt="投稿画像">
+            <!-- 画像複数枚表示 -->
+            <div class="swiper post-carousel" th:if="${post.imageUrls != null}">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" th:each="img : ${post.imageUrls}">
+                        <img th:src="${img}" alt="投稿画像" class="carousel-image">
                     </div>
                 </div>
                 <div class="swiper-pagination"></div>

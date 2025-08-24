@@ -26,13 +26,16 @@
 
                     <input type="file" id="imageInput" th:field="*{image}" accept="image/*" style="display: none;">
                     <input type="hidden" th:field="*{profileImage}"></input>
+                    <div class="form-validate">
+                        <span th:if="${imageError}" th:text="${imageError}" class="error"></span>
+                    </div>
 
                     <div class="form-center">
                         <label for="userName" class="disp-block">ユーザーネーム</label>
                         <input id="userName" size="30" th:field="*{userName}" placeholder="Yozora">
                     </div>
                     <div class="form-validate">
-                        <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="errors"></span>
+                        <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="error"></span>
                     </div>
 
                     <div class="form-center">
@@ -40,14 +43,14 @@
                         <input id="email" size="30" th:field="*{email}" placeholder="star-4649@yozora.com">
                     </div>
                     <div class="form-validate">
-                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="errors"></span>
+                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></span>
                     </div>
 
                     <div class="form-btn">
                         <input type="submit" value="保存" class="btn">
                     </div>
                     <div class="form-center">
-                        <span th:text="${error}" class="errors"></span>
+                        <span th:text="${error}" class="error"></span>
                     </div>
 
                     <input type="hidden" th:field="*{id}"></input>
