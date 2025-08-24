@@ -1,9 +1,17 @@
-# Yozora - 景色共有アプリ
+<img width="1361" height="628" alt="ログイン画面" src="https://github.com/user-attachments/assets/21ff8555-654b-4d9a-8830-3e7b90e0cb19" /># Yozora - 景色共有アプリ
 
 ## 概要
 
 **Yozora** は、星や夜景などの写真を共有できるWebアプリです。  
 Google Map上にピンを立てて投稿し、全国の絶景スポットを記録・共有できます。
+
+
+---
+
+##　実際の画面
+
+- ログイン画面
+<img width="1361" height="628" alt="ログイン画面" src="https://github.com/user-attachments/assets/5007ecce-2cbd-4c91-972f-24bdc68d6739" />
 
 
 ---
