@@ -9,8 +9,9 @@ Google Map上にピンを立てて投稿し、全国の絶景スポットを記�
 ## 実際の画面
 
 - ログイン画面
-<img width="1361" height="628" alt="ログイン画面" src="https://github.com/user-attachments/assets/5007ecce-2cbd-4c91-972f-24bdc68d6739" />
-<br><br>
+<p style="margin-bottom:30px;">
+  <img width="1361" height="628" alt="ログイン画面" src="https://github.com/user-attachments/assets/5007ecce-2cbd-4c91-972f-24bdc68d6739" />
+</p>
 
 - 新規登録画面
 <img width="1359" height="627" alt="新規登録画面" src="https://github.com/user-attachments/assets/13e83310-1bd3-4c29-988f-52cbbd831c79" />
