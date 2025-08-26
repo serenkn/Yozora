@@ -11,56 +11,54 @@ Google Map上にピンを立てて投稿し、全国の絶景スポットを記�
 - ログイン画面
 <img width="1361" height="628" alt="ログイン画面" src="https://github.com/user-attachments/assets/5007ecce-2cbd-4c91-972f-24bdc68d6739" />
 <p>&nbsp;</p>
-<p>&nbsp;</p>
-
 
 - 新規登録画面
 <img width="1359" height="627" alt="新規登録画面" src="https://github.com/user-attachments/assets/13e83310-1bd3-4c29-988f-52cbbd831c79" />
-<br><br>
+<p>&nbsp;</p>
 
 - TOP画面
 <img width="1363" height="632" alt="TOP画面" src="https://github.com/user-attachments/assets/d3e8f397-7fe0-4dfe-b058-c54d01395bb7" />
-<br><br>
+<p>&nbsp;</p>
 
 - 景色一覧画面
 <img width="1364" height="632" alt="景色一覧画面" src="https://github.com/user-attachments/assets/4fbd8653-6ed7-47aa-84d5-3f776883ba26" />
-<br><br>
+<p>&nbsp;</p>
 
 - マイページ画面
 <img width="1365" height="631" alt="マイページ画面、投稿あり" src="https://github.com/user-attachments/assets/371d034c-3eef-4d5f-b031-44090c027821" />
-<br><br>
+<p>&nbsp;</p>
 
 - 投稿詳細画面
 <img width="1343" height="622" alt="詳細画面" src="https://github.com/user-attachments/assets/91afb741-7028-449f-8a58-4bb6b3b3e0f2" />
-<br><br>
+<p>&nbsp;</p>
 
 - プロフィール編集画面
 <img width="1365" height="625" alt="ユーザー編集画面" src="https://github.com/user-attachments/assets/3dae5829-c808-414f-9268-a97c1d973d6b" />
-<br><br>
+<p>&nbsp;</p>
 
 - 新規投稿画面
 <img width="1365" height="632" alt="新規投稿画面" src="https://github.com/user-attachments/assets/0bb1023e-8b30-4b50-9541-37a99e76a97b" />
-<br><br>
+<p>&nbsp;</p>
 
 - 投稿編集画面
 <img width="1365" height="632" alt="投稿編集画面" src="https://github.com/user-attachments/assets/8cb30ba9-95e9-4827-8d8d-08fd5b090a5a" />
-<br><br>
+<p>&nbsp;</p>
 
 -TOP画面の詳細ピン、投稿ピン
 <img width="487" height="432" alt="top画面_infowindows" src="https://github.com/user-attachments/assets/a512cbb3-5334-41f0-90c6-bc484b631eea" />
-<br><br>
+<p>&nbsp;</p>
 
 - コメント欄
 <img width="1365" height="636" alt="コメント欄" src="https://github.com/user-attachments/assets/4681657f-2a62-49c0-b361-11552c72ed3a" />
-<br><br>
+<p>&nbsp;</p>
 
 - コメント編集機能
 <img width="679" height="309" alt="コメント編集モーダル" src="https://github.com/user-attachments/assets/587823dd-105a-4add-98ca-b8a249c3fe5a" />
-<br><br>
+<p>&nbsp;</p>
 
 - 詳細画面のコメント欄
 <img width="764" height="414" alt="詳細画面のコメント欄" src="https://github.com/user-attachments/assets/97b9a455-aac9-4151-bd0d-78c0ef844b30" />
-<br><br>
+<p>&nbsp;</p>
 
 - ER図
 <img width="1020" height="429" alt="Yozora_ER図" src="https://github.com/user-attachments/assets/3bbc6fe8-7a63-46ea-b4b8-2ef4f8821bbd" />
