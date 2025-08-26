@@ -54,8 +54,9 @@
     </script>
 
 
-    <!-- APIを読み込み　-->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsqURmvn6hJLiRn1-eqrGC5aoSdXHW-Yg&callback=initMap"
+    <!-- Google Maps API 読み込み -->
+    <script
+        th:src="@{'https://maps.googleapis.com/maps/api/js?key=' + ${@environment.getProperty('google.maps.api.key')} + '&callback=initMap'}"
         async defer></script>
 </body>
 

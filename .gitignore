@@ -1,21 +1,17 @@
-# ビルド関連
-target/
-*.jar
-*.class
+# ビルド成果物
+/target/
+/build/
 
-# VSCode
+# IDE関連
 .vscode/
 
-# ログ・一時ファイル
+# アップロード画像
+/images/
+
+# OS一時ファイル
 *.log
 *.tmp
-
-# OSゴミファイル
 Thumbs.db
-
-# 画像を除外
-/images/
 
 # 環境設定ファイル
 .env
-.docker/
