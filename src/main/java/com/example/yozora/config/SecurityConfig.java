@@ -25,7 +25,7 @@ public class SecurityConfig {
                 http
                                 // 認可ルールの設定
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/login", "/userRegist", "/top",
+                                                .requestMatchers("/login", "/userRegist", "/top", "/password/reset",
                                                                 "/css/**", "/js/**", "/images/**")
                                                 .permitAll()
                                                 .anyRequest().authenticated())
@@ -44,7 +44,7 @@ public class SecurityConfig {
                                                 .logoutSuccessUrl("/login?logout")
                                                 .permitAll())
 
-                                // 開発中なのでCSRF無効（本番で有効化推奨）
+                                // 開発中なのでCSRF無効（本番で有効化）
                                 .csrf(csrf -> csrf.disable());
 
                 return http.build();

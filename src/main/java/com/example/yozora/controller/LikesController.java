@@ -22,7 +22,7 @@ public class LikesController {
     }
 
     // いいねボタン処理
-    @PostMapping("/like/toggle")
+    @PostMapping(value = "/like/toggle")
     public void toggleLike(@AuthenticationPrincipal User loginUser, @RequestParam("postId") Integer postId) {
 
         String email = loginUser.getUsername();

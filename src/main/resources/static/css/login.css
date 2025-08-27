@@ -47,6 +47,14 @@ h1 {
     font-weight: bold;
 }
 
+/* テキストボックス */
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100%;
+    box-sizing: border-box;
+}
+
 /* エラーメッセージ */
 .error {
     color: red;

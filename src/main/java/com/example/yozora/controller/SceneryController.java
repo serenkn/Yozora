@@ -42,7 +42,7 @@ public class SceneryController {
     }
 
     // 人気順（いいね数）で並び替え
-    @GetMapping("/scenery/popular")
+    @GetMapping(value = "/scenery/popular")
     public String toPopular(@AuthenticationPrincipal User loginUser, Model model) {
 
         // ユーザー情報の取得
@@ -58,7 +58,7 @@ public class SceneryController {
     }
 
     // ランダム順
-    @GetMapping("/scenery/random")
+    @GetMapping(value = "/scenery/random")
     public String toRandom(@AuthenticationPrincipal User loginUser, Model model) {
 
         // ユーザー情報の取得
@@ -74,7 +74,7 @@ public class SceneryController {
     }
 
     // 過去順
-    @GetMapping("/scenery/oldest")
+    @GetMapping(value = "/scenery/oldest")
     public String toOldest(@AuthenticationPrincipal User loginUser, Model model) {
 
         // ユーザー情報の取得

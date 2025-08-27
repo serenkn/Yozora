@@ -204,10 +204,10 @@ public class PostsController {
     }
 
     // 戻るボタン
-    @PostMapping("/back")
+    @PostMapping(value = "/back")
     public String back(@RequestParam(value = "ret", required = false) String ret) {
 
-        String target = (ret != null && ret.startsWith("/")) ? ret : "/top";
+        String target = (ret != null && ret.startsWith("/")) ? ret : "/login";
 
         return "redirect:" + target;
     }

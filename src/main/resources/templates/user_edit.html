@@ -32,7 +32,7 @@
 
                     <div class="form-center">
                         <label for="userName" class="disp-block">ユーザーネーム</label>
-                        <input id="userName" size="30" th:field="*{userName}" placeholder="Yozora">
+                        <input id="userName" type="text" th:field="*{userName}" placeholder="Yozora">
                     </div>
                     <div class="form-validate">
                         <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="error"></span>
@@ -40,7 +40,7 @@
 
                     <div class="form-center">
                         <label for="email" class="disp-block">メールアドレス</label>
-                        <input id="email" size="30" th:field="*{email}" placeholder="star-4649@yozora.com">
+                        <input id="email" type="text" th:field="*{email}" placeholder="star-4649@yozora.com">
                     </div>
                     <div class="form-validate">
                         <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></span>

@@ -56,7 +56,7 @@ public class CommentsController {
     }
 
     // コメント編集
-    @PostMapping("/comment/edit")
+    @PostMapping(value = "/comment/edit")
     public String editCommentByPost(
             @Validated @ModelAttribute CommentForm form,
             BindingResult result,
@@ -87,7 +87,7 @@ public class CommentsController {
     }
 
     // コメント削除
-    @PostMapping("/comment/delete")
+    @PostMapping(value = "/comment/delete")
     public String deleteComment(
             @ModelAttribute CommentForm form,
             @AuthenticationPrincipal User loginUser,

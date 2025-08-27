@@ -9,7 +9,7 @@ const showDelete = (page === 'create' || page === 'edit');
 
     // referrer を見て戻り先を決定
     const ref = document.referrer;
-    let target = "/top"; // デフォルト
+    let target = "/login"; // デフォルト
 
     try {
         if (ref) {
@@ -22,6 +22,10 @@ const showDelete = (page === 'create' || page === 'edit');
                     target = "/scenery";
                 } else if (path.startsWith("/top")) {
                     target = "/top";
+                } else if (path.startsWith("/user_edit")) {
+                    target = "/user_edit";
+                } else if (path.startsWith("/login")) {
+                    target = "/login";
                 }
             }
         }
