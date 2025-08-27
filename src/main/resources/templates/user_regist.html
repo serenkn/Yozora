@@ -43,16 +43,14 @@
                         <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></span>
                     </div>
 
-                    <div class="form-btn">
-                        <input type="submit" value="登録" class="btn">
-                    </div>
                     <div class="form-center">
                         <span th:text="${error}" class="error"></span>
                     </div>
+                    <div class="form-btn">
+                        <input type="submit" value="登録" class="btn">
+                    </div>
 
                 </form>
-
-                <span id="error-msg" th:data-error="${error}" style="display:none;"></span>
 
                 <form th:action="@{/login}">
                     <div class="form-btn">

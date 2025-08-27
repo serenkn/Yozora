@@ -64,7 +64,7 @@ input[type="email"] {
 
 /* メッセージ表示 */
 .message {
-    color: green;
+    color: white;
     text-align: center;
     margin-bottom: 16px;
 }

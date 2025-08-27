@@ -46,11 +46,11 @@
                         <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></span>
                     </div>
 
-                    <div class="form-btn">
-                        <input type="submit" value="保存" class="btn">
-                    </div>
                     <div class="form-center">
                         <span th:text="${error}" class="error"></span>
+                    </div>
+                    <div class="form-btn">
+                        <input type="submit" value="保存" class="btn">
                     </div>
 
                     <input type="hidden" th:field="*{id}"></input>
@@ -69,7 +69,7 @@
         </main>
 
         <footer>
-            <a th:href="@{/password_edit}">パスワード変更はこちら</a>
+            <a th:href="@{/password/edit}">パスワード変更はこちら</a>
 
             <form th:action="@{/userDelete}" method="post" onsubmit="return confirm('本当にアカウントを削除しますか？');">
                 <button type="submit" class="link-button">アカウント削除はこちら</button>

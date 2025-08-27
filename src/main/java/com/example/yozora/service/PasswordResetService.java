@@ -29,7 +29,7 @@ public class PasswordResetService {
         // トークン発行
         resetEntity = passwordResetTokenService.issueToken(resetEntity);
 
-        // 有効期限をセッ：30分後
+        // 有効期限をセット：30分後
         resetEntity.setExpiresAt(LocalDateTime.now().plusMinutes(30));
 
         // メール送信

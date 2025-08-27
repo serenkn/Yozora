@@ -26,7 +26,8 @@ public class SecurityConfig {
                                 // 認可ルールの設定
                                 .authorizeHttpRequests(auth -> auth
                                                 .requestMatchers("/login", "/userRegist", "/top", "/password/reset",
-                                                                "/css/**", "/js/**", "/images/**")
+                                                                "/password/reset/confirm",
+                                                                "/css/**", "/js/**")
                                                 .permitAll()
                                                 .anyRequest().authenticated())
 

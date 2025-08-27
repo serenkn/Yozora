@@ -18,12 +18,16 @@ const showDelete = (page === 'create' || page === 'edit');
                 const path = refUrl.pathname;
                 if (path.startsWith("/mypage")) {
                     target = "/mypage";
+
                 } else if (path.startsWith("/scenery")) {
                     target = "/scenery";
+
                 } else if (path.startsWith("/top")) {
                     target = "/top";
-                } else if (path.startsWith("/user_edit")) {
-                    target = "/user_edit";
+
+                } else if (path.startsWith("/password/edit")) {
+                    target = "/password/edit";
+
                 } else if (path.startsWith("/login")) {
                     target = "/login";
                 }

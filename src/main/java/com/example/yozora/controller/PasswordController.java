@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -31,7 +32,7 @@ public class PasswordController {
     }
 
     // パスワード変更画面の表示
-    @GetMapping(value = "/password_edit")
+    @GetMapping(value = "/password/edit")
     public String toPasswordEdit(Model model) {
 
         model.addAttribute("passwordEditForm", new PasswordEditForm());
@@ -40,7 +41,7 @@ public class PasswordController {
     }
 
     // パスワード変更処理
-    @PostMapping(value = "/password_edit")
+    @PostMapping(value = "/password/edit")
     public String updatePassword(
             @AuthenticationPrincipal User loginUser,
             @Valid @ModelAttribute PasswordEditForm form,
@@ -95,6 +96,52 @@ public class PasswordController {
 
         redirect.addFlashAttribute("message", "パスワード再設定メールをお送りしました。");
 
-        return "redirect:/password/reset?sent=1";
+        return "redirect:/password/reset";
+    }
+
+    // パスワード再設定画面表示
+    @GetMapping(value = "/password/reset/confirm")
+    public String toPasswordResetConfirm(@RequestParam("token") String token,
+            Model model) {
+
+        // tokenが期限切れ、または存在するかチェック
+        if (passwordResetService.findToken(token).isEmpty()) {
+
+            model.addAttribute("error", "リンクが無効または期限切れです。");
+
+            return "password_reset";
+        }
+
+        // トークンセット
+        PasswordResetForm form = new PasswordResetForm();
+        form.setToken(token);
+
+        model.addAttribute("passwordResetForm", form);
+
+        return "password_reset_confirm";
+    }
+
+    // パスワード再設定
+    @PostMapping(value = "/password/reset/confirm")
+    public String PasswordResetConfirm(@Valid @ModelAttribute PasswordResetForm form,
+            BindingResult result,
+            Model model) {
+
+        if (result.hasErrors()) {
+            return "password_reset";
+        }
+
+        String pas1 = form.getPassword();// 新パスワード
+        String pas2 = form.getConfirmPassword();// 確認用パスワード
+
+        // 新パスワードと確認用パスワードが同じかチェック
+        if (pas1 != pas2 && !pas1.equals(pas2)) {
+
+            model.addAttribute("error", "入力されたパスワードが一致しません");
+
+            return "password_reset_confirm";
+        }
+
+        return "redirect:/login";
     }
 }

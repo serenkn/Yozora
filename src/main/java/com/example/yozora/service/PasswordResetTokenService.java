@@ -38,7 +38,7 @@ public class PasswordResetTokenService {
         return entity;
     }
 
-    /** URLセーフなランダムトークン生成（Base64URL, no padding） */
+    // URLセーフなランダムトークン生成（Base64URL, no padding）
     private String generateUrlSafeToken(int byteLength) {
 
         byte[] buf = new byte[byteLength];
