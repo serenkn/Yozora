@@ -7,8 +7,8 @@ import java.util.Base64;
 import org.springframework.stereotype.Service;
 
 import com.example.yozora.entity.PasswordResetEntity;
-import com.example.yozora.repository.PasswordRepository;
 
+//トークン発行用
 @Service
 public class PasswordResetTokenService {
 
@@ -16,16 +16,9 @@ public class PasswordResetTokenService {
     private static final long expireMinutes = 30; // 有効期限は固定30分
 
     private final SecureRandom secureRandom = new SecureRandom();
-    private final PasswordRepository passwordRepository;
-
-    public PasswordResetTokenService(PasswordRepository passwordRepository) {
-        this.passwordRepository = passwordRepository;
-    }
 
     // トークン発行
     public PasswordResetEntity issueToken(PasswordResetEntity entity) {
-        // 既存トークンは全削除（常に最新1枚）
-        passwordRepository.deleteAllByUserId(entity.getUserId());
 
         // 乱数トークン（URLセーフ、paddingなし）
         entity.setToken(generateUrlSafeToken(TOKEN_BYTES));
@@ -33,15 +26,13 @@ public class PasswordResetTokenService {
         // 期限を刻んで保存
         entity.setExpiresAt(LocalDateTime.now().plusMinutes(expireMinutes));
 
-        passwordRepository.insertToken(entity);
-
         return entity;
     }
 
     // URLセーフなランダムトークン生成（Base64URL, no padding）
     private String generateUrlSafeToken(int byteLength) {
 
-        byte[] buf = new byte[byteLength];
+        byte[] buf = new byte[byteLength];// 256bit
 
         secureRandom.nextBytes(buf);
 

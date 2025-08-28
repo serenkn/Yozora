@@ -379,9 +379,9 @@ public class PostsRepository {
 
         String sql = "DELETE FROM post_images WHERE post_id = ?";
 
-        int numberOfRow = jdbcTemplate.update(sql, postId);
+        int row = jdbcTemplate.update(sql, postId);
 
-        return numberOfRow;
+        return row;
     }
 
     // 投稿IDでコメントを一括削除
@@ -389,9 +389,9 @@ public class PostsRepository {
 
         String sql = "DELETE FROM comments WHERE post_id = ?";
 
-        int numberOfRow = jdbcTemplate.update(sql, postId);
+        int row = jdbcTemplate.update(sql, postId);
 
-        return numberOfRow;
+        return row;
     }
 
     // 投稿IDで投稿削除：画像、コメント以外
@@ -399,8 +399,8 @@ public class PostsRepository {
 
         String sql = "DELETE FROM posts WHERE id = ?";
 
-        int numberOfRow = jdbcTemplate.update(sql, postId);
+        int row = jdbcTemplate.update(sql, postId);
 
-        return numberOfRow;
+        return row;
     }
 }

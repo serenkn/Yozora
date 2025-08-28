@@ -277,7 +277,7 @@ public class PostsService {
         int resultRow = postsRepository.updatePost(postsEntity);
 
         // 投稿画像は全削除
-        postsRepository.deletePostImages(form.getId());
+        resultRow += postsRepository.deletePostImages(form.getId());
 
         List<String> pathToSave;
 

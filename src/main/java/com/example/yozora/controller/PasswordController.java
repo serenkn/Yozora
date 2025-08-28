@@ -2,6 +2,7 @@ package com.example.yozora.controller;
 
 import com.example.yozora.entity.UsersEntity;
 import com.example.yozora.form.PasswordEditForm;
+import com.example.yozora.form.PasswordResertRequestForm;
 import com.example.yozora.form.PasswordResetForm;
 import com.example.yozora.service.PasswordResetService;
 import com.example.yozora.service.UsersService;
@@ -62,6 +63,7 @@ public class PasswordController {
         }
 
         model.addAttribute("message", "パスワードを変更しました");
+
         return "redirect:/mypage";
     }
 
@@ -69,32 +71,42 @@ public class PasswordController {
     @GetMapping(value = "/password/reset")
     public String toPasswordReset(Model model) {
 
-        model.addAttribute("passwordResetForm", new PasswordResetForm());
+        model.addAttribute("passwordResertRequestForm", new PasswordResertRequestForm());
 
-        return "password_reset";
+        return "password_reset_request";
     }
 
     // 指定されたメアドにパスワードを再設定画面のリンク送付
     @PostMapping(value = "/password/reset")
-    public String passwordReset(@Valid @ModelAttribute PasswordResetForm form,
+    public String passwordReset(
+            @Valid @ModelAttribute PasswordResertRequestForm form,
             BindingResult result,
             RedirectAttributes redirect,
             Model model) {
 
         if (result.hasErrors()) {
-            return "password_reset";
+            return "password_reset_request";
         }
 
         // 入力されたメールが存在したら
         String email = form.getEmail();
         UsersEntity user = usersService.getUserByEmail(email);
 
+        int row = 0;
+        // 入力されたメールが存在したら
         if (user != null) {
 
-            passwordResetService.tokenAndSendMail(user);
-        }
+            row = passwordResetService.tokenAndSendMail(user);
+            // 失敗時
+            if (row == 0) {
 
-        redirect.addFlashAttribute("message", "パスワード再設定メールをお送りしました。");
+                model.addAttribute("error", "送信に失敗しました。もう一度お試しください");
+
+                return "password_reset_request";
+            }
+        }
+        // メアドの存在の有無にかかわらずメッセージ表示
+        redirect.addFlashAttribute("message", "パスワード再設定のご案内メールを送信しました。");
 
         return "redirect:/password/reset";
     }
@@ -105,14 +117,17 @@ public class PasswordController {
             Model model) {
 
         // tokenが期限切れ、または存在するかチェック
-        if (passwordResetService.findToken(token).isEmpty()) {
+        int row = passwordResetService.findToken(token);
 
-            model.addAttribute("error", "リンクが無効または期限切れです。");
+        // 無効、または期限切れのトークン
+        if (row == 0) {
 
-            return "password_reset";
+            model.addAttribute("message", "リンクが無効または期限切れです。お手数ですが、メールアドレスを入力し、やり直してください");
+
+            return "password_reset_request";
         }
 
-        // トークンセット
+        // トークンセットし、ビューに渡す
         PasswordResetForm form = new PasswordResetForm();
         form.setToken(token);
 
@@ -128,7 +143,7 @@ public class PasswordController {
             Model model) {
 
         if (result.hasErrors()) {
-            return "password_reset";
+            return "password_reset_confirm";
         }
 
         String pas1 = form.getPassword();// 新パスワード
@@ -142,6 +157,15 @@ public class PasswordController {
             return "password_reset_confirm";
         }
 
+        // 更新処理
+        int numberOfRow = passwordResetService.updatePasswordByToken(form.getToken(), pas1);
+
+        if (numberOfRow == 0) {
+
+            model.addAttribute("message", "更新に失敗しました。メールアドレスを入力からやり直して下さい。");
+
+            return "password_reset_confirm";
+        }
         return "redirect:/login";
     }
 }

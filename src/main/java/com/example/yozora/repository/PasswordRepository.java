@@ -18,15 +18,17 @@ public class PasswordRepository {
     }
 
     // user_idでtokenを一括削除
-    public void deleteAllByUserId(Integer userId) {
+    public int deleteAllByUserId(Integer userId) {
 
         String sql = "DELETE FROM password_reset_tokens WHERE user_id = ?";
 
-        jdbcTemplate.update(sql, userId);
+        int row = jdbcTemplate.update(sql, userId);
+
+        return row;
     }
 
     // 期限付きtoken発行
-    public void insertToken(PasswordResetEntity entity) {
+    public int insertToken(PasswordResetEntity entity) {
 
         String sql = "INSERT INTO password_reset_tokens (user_id, token, expires_at) VALUES (?, ?, ?)";
 
@@ -37,6 +39,53 @@ public class PasswordRepository {
                 Timestamp.valueOf(entity.getExpiresAt())
         };
 
-        jdbcTemplate.update(sql, parameters);
+        int row = jdbcTemplate.update(sql, parameters);
+
+        return row;
+    }
+
+    // tokenが有効かつ期限切れでないか確認
+    public Integer selectToken(String token) {
+
+        String sql = """
+                    SELECT COUNT(*)
+                    FROM password_reset_tokens
+                    WHERE token = ?
+                    AND expires_at > CURRENT_TIMESTAMP
+                """;
+
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, token);
+
+        if (count == null) {
+            count = 0;
+        }
+
+        return count;
+    }
+
+    // tokenに紐づくuser_id を検索
+    public Integer findUserIdByToken(String token) {
+
+        String sql = """
+                SELECT user_id
+                FROM password_reset_tokens
+                WHERE token = ?
+                  AND expires_at > CURRENT_TIMESTAMP
+                LIMIT 1
+                """;
+
+        Integer result = jdbcTemplate.queryForObject(sql, Integer.class, token);
+
+        return result;
+    }
+
+    // 使い終わったトークンを1件だけ削除（再設定完了時に使用）
+    public int deleteByToken(String token) {
+
+        String sql = "DELETE FROM password_reset_tokens WHERE token = ?";
+
+        int row = jdbcTemplate.update(sql, token);
+
+        return row;
     }
 }
