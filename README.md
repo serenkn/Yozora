@@ -1,4 +1,4 @@
-## Yozora　- 景色共有アプリ
+<img width="764" height="414" alt="詳細画面のコメント欄" src="https://github.com/user-attachments/assets/a9daf733-9581-4892-bbe0-bcd252985c21" />## Yozora　- 景色共有アプリ
 
 
 
@@ -84,14 +84,17 @@ MVCモデルに基づいて設計
 - Service 層でビジネスロジックを実行し
 - Repository 層を通じて MySQL にアクセスします
 - Controller は結果を View（Thymeleaf）に渡し、HTMLとしてユーザーに返却します
+<img width="320" height="405" alt="アーキテクチャ図" src="https://github.com/user-attachments/assets/6df16df4-b4ce-4859-8f92-849bcbce9090" />
 
 ---
 
 ## ER図・テーブル設計
+<img width="907" height="431" alt="ER図Yozora" src="https://github.com/user-attachments/assets/6872d893-49cb-4b50-894b-852aeb84aaf3" />
 
 ---
 
 ### ディレクトリ構造
+```bash
 Yozora/
 |---.env
 |---.gitignore
@@ -130,7 +133,7 @@ Yozora/
     |       \---templates/
     |           \---fragments/
     \---test/
-
+```
 ---
 
 ## セットアップ方法
@@ -152,12 +155,12 @@ MYSQL_USER=app
 MYSQL_PASSWORD=app
 EOF
 
-# 3. DB初期化（必要に応じて）
+# 3. コンテナ起動
+docker compose up -d --build
+
+# 4. DB初期化（必要に応じて）
 docker compose exec db sh -c "mysql -u$MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE < /docker-entrypoint-initdb.d/schema.sql"
 docker compose exec db sh -c "mysql -u$MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE < /docker-entrypoint-initdb.d/seed.sql"
-
-# 4. コンテナ起動
-docker compose up -d --build
 
 # 5. ブラウザでアクセス
 http://localhost:8080
@@ -208,50 +211,65 @@ GOOGLE_MAPS_API_KEY=your_api_key_here
 ## 実際の画面
 
 - ログイン画面
-
+<img width="1361" height="628" alt="ログイン画面" src="https://github.com/user-attachments/assets/0c9d2b60-894b-44bd-ad41-cd84c118950f" />
+<p>&nbsp;</p>
 
 - 新規登録画面
-
+<img width="1359" height="627" alt="新規登録画面" src="https://github.com/user-attachments/assets/6df48540-54f0-4f9a-95b6-02798f79f285" />
+<p>&nbsp;</p>
 
 - TOP画面
-
+<img width="1363" height="632" alt="TOP画面" src="https://github.com/user-attachments/assets/2d108496-9062-4950-b2b2-b4e786bc1e68" />
+<p>&nbsp;</p>
 
 - 景色一覧画面
-
+<img width="1364" height="632" alt="景色一覧画面" src="https://github.com/user-attachments/assets/81c753dc-4420-4db3-b6f7-8997e874e13e" />
+<p>&nbsp;</p>
 
 - マイページ画面
-
+<img width="1365" height="631" alt="マイページ画面、投稿あり" src="https://github.com/user-attachments/assets/6f7f0f0e-b8e6-4345-8fc3-472470e5e61b" />
+<p>&nbsp;</p>
 
 - 投稿詳細画面
-
+<img width="1343" height="622" alt="詳細画面" src="https://github.com/user-attachments/assets/9f35ff6b-9566-4d73-86d4-4ab0e2315698" />
+<p>&nbsp;</p>
 
 - プロフィール編集画面
-
+<img width="1365" height="625" alt="ユーザー編集画面" src="https://github.com/user-attachments/assets/53163fe6-e63e-4bbb-b76e-1fdf71c3826c" />
+<p>&nbsp;</p>
 
 - 新規投稿画面
-
+<img width="1365" height="632" alt="新規投稿画面" src="https://github.com/user-attachments/assets/2e10ffc3-1b68-4195-91a6-fe1819617653" />
+<p>&nbsp;</p>
 
 - 投稿編集画面
+<img width="1365" height="632" alt="投稿編集画面" src="https://github.com/user-attachments/assets/bcb0dc70-5027-410a-b714-7e378c550982" />
 <p>&nbsp;</p>
 
 - パスワードを忘れた方用の画面
-
+<img width="1365" height="621" alt="パスワード忘れた方用画面" src="https://github.com/user-attachments/assets/d66b3cb6-999d-409d-b62d-8aa18ff8e016" />
+<p>&nbsp;</p>
 
 - パスワード再設定のご案内メール
-
+<img width="1033" height="306" alt="パスワード再設定のご案内メール" src="https://github.com/user-attachments/assets/6652e2c3-88fc-458c-a2e6-00a7abf39f2b" />
+<p>&nbsp;</p>
 
 - パスワード再設定画面
-
+<img width="1365" height="630" alt="パスワード再設定画面" src="https://github.com/user-attachments/assets/c0bb7760-b4bd-4108-bc04-39905ff82cfa" />
+<p>&nbsp;</p>
 
 
 - TOP画面の詳細ピン、投稿ピン
-
+<img width="487" height="432" alt="top画面_infowindows" src="https://github.com/user-attachments/assets/39b34c29-41b2-4d83-9e69-0cfa08880f5a" />
+<p>&nbsp;</p>
 
 - コメント欄
-
+<img width="1365" height="636" alt="コメント欄" src="https://github.com/user-attachments/assets/66704d4f-ae68-4526-95e6-44307f3b7cbe" />
+<p>&nbsp;</p>
 
 - コメント編集機能
-
+<img width="679" height="309" alt="コメント編集モーダル" src="https://github.com/user-attachments/assets/1af075ea-f6b6-4068-8a6e-20c41c76bd86" />
+<p>&nbsp;</p>
 
 - 詳細画面のコメント欄
-
+<img width="764" height="414" alt="詳細画面のコメント欄" src="https://github.com/user-attachments/assets/00af40e2-3586-4b07-9d86-7460dbcfca9c" />
