@@ -1,6 +1,4 @@
-<img width="764" height="414" alt="詳細画面のコメント欄" src="https://github.com/user-attachments/assets/a9daf733-9581-4892-bbe0-bcd252985c21" />## Yozora　- 景色共有アプリ
-
-
+## Yozora　- 景色共有アプリ
 
 星や夜景などの写真を共有できるWebアプリです。
 地図上にお気に入りの景色スポットを投稿し、複数の写真や感想を共有できます。
