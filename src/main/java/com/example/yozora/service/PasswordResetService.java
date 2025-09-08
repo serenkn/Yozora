@@ -1,7 +1,5 @@
 package com.example.yozora.service;
 
-import java.time.LocalDateTime;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,9 +45,6 @@ public class PasswordResetService {
         // 過去のトークン全削除し、追加
         int resultRow = passwordRepository.deleteAllByUserId(resetEntity.getUserId());
         resultRow += passwordRepository.insertToken(resetEntity);
-
-        // 有効期限をセット：30分後
-        resetEntity.setExpiresAt(LocalDateTime.now().plusMinutes(30));
 
         // リンクにトークン付与
         String link = "http://localhost:8080/password/reset/confirm?token=" + resetEntity.getToken();

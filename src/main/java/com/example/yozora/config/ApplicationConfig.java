@@ -1,4 +1,4 @@
-package com.example.yozora.common.config;
+package com.example.yozora.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

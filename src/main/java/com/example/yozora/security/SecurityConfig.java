@@ -1,4 +1,4 @@
-package com.example.yozora.config;
+package com.example.yozora.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

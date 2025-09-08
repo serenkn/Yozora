@@ -88,4 +88,14 @@ public class PasswordRepository {
 
         return row;
     }
+
+    // 期限切れトークンをまとめて削除
+    public int deleteExpired() {
+
+        String sql = "DELETE FROM password_reset_tokens WHERE expires_at < NOW()";
+
+        int row = jdbcTemplate.update(sql);
+
+        return row;
+    }
 }
